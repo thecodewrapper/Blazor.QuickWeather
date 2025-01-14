@@ -1,0 +1,162 @@
+﻿@inject IWeatherServiceFactory WeatherServiceFactory
+
+<div class="weather-widget">
+    <!-- Current Weather Header with Refresh Button -->
+    <div class="current-weather-header">
+        <h2 class="location">@(WeatherData?.Location ?? "Loading...")</h2>
+        <button class="refresh-button" @onclick="OnDemandUpdate" title="Refresh">🔄</button>
+    </div>
+
+    <!-- Current Weather Section -->
+    <div class="current-weather">
+        <div class="temperature">
+            <span>@(Math.Round(WeatherData?.Temperature ?? 0))°</span>
+        </div>
+        <p class="description">@(WeatherData?.Description ?? "Fetching weather...")</p>
+    </div>
+
+    <!-- 5-Day Forecast Section -->
+    @if (ForecastData != null)
+    {
+        <div class="forecast">
+            @foreach (var day in ForecastData)
+            {
+                <div class="forecast-day">
+                    <span class="day">@day.Day</span>
+                    <img src="@GetWeatherIconUrl()" alt="@day.Description" class="forecast-icon" />
+                    <span class="temp">@day.MaxTemp° <small>@day.MinTemp°</small></span>
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Footer with Last Updated -->
+    <div class="weather-footer">
+        <p>Last updated: @LastUpdated.ToString("HH:mm:ss") <br />Source: @ApiResourceName</p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Location { get; set; } = "London";
+    [Parameter] public string? ApiResourceName { get; set; }
+    [Parameter] public int UpdateIntervalSeconds { get; set; } = 30;
+    private List<ForecastDay>? ForecastData;
+
+    private WeatherData? WeatherData;
+    private Timer? UpdateTimer;
+    private DateTime LastUpdated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWeatherData();
+        StartTimer();
+    }
+
+    private async Task LoadWeatherData()
+    {
+        WeatherData = await TryGetWeatherData();
+        if (WeatherData != null)
+        {
+            LastUpdated = DateTime.Now;
+
+            // Simulated 5-day forecast (replace with actual API call for 5-day data)
+            ForecastData = new List<ForecastDay>
+            {
+                new ForecastDay { Day = "Wednesday", Icon = "01d", MaxTemp = 23, MinTemp = 6, Description = "Clear Sky" },
+                new ForecastDay { Day = "Thursday", Icon = "02d", MaxTemp = 24, MinTemp = 6, Description = "Few Clouds" },
+                new ForecastDay { Day = "Friday", Icon = "01d", MaxTemp = 30, MinTemp = 15, Description = "Sunny" },
+                new ForecastDay { Day = "Saturday", Icon = "01d", MaxTemp = 33, MinTemp = 19, Description = "Sunny" },
+                new ForecastDay { Day = "Sunday", Icon = "01d", MaxTemp = 32, MinTemp = 20, Description = "Sunny" }
+            };
+        }
+        else
+        {
+            ForecastData = null;
+        }
+    }
+
+    private async Task OnDemandUpdate()
+    {
+        await LoadWeatherData();
+        StateHasChanged();
+    }
+
+    private void StartTimer()
+    {
+        if (UpdateIntervalSeconds < 1)
+        {
+            throw new ArgumentException("UpdateIntervalSeconds must be greater than or equal to 1 second.");
+        }
+
+        var updateIntervalMilliseconds = UpdateIntervalSeconds * 1000;
+
+        UpdateTimer = new Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await LoadWeatherData();
+                StateHasChanged();
+            });
+        }, null, updateIntervalMilliseconds, updateIntervalMilliseconds);
+    }
+
+    private string GetDefaultApiResource()
+    {
+        return WeatherServiceFactory.Create("OpenWeatherMap").GetType().Name;
+    }
+
+    private IEnumerable<string> GetAllApiResources()
+    {
+        return new[] { "OpenWeatherMap", "WeatherAPI" }; // Replace with dynamic resource list if available
+    }
+
+    public void Dispose()
+    {
+        UpdateTimer?.Dispose();
+    }
+
+    private async Task<WeatherData?> TryGetWeatherData()
+    {
+        var resources = ApiResourceName != null
+            ? new[] { ApiResourceName }
+            : GetAllApiResources();
+
+        foreach (var apiName in resources)
+        {
+            try
+            {
+                var weatherService = WeatherServiceFactory.Create(apiName);
+                var weatherData = await weatherService.GetWeatherAsync(Location);
+
+                if (weatherData != null)
+                {
+                    ApiResourceName = apiName; //setting this here for the icon
+                    return weatherData;
+                }
+            }
+            catch
+            {
+                // Ignore exceptions and try the next API resource
+            }
+        }
+
+        return null;
+    }
+
+    private string GetWeatherIconUrl(){
+        if (ApiResourceName == "OpenWeatherMap"){
+            return $"https://openweathermap.org/img/wn/{WeatherData.Icon}@2x.png";
+        }else{
+            return string.Empty;
+        }
+    }
+
+    private class ForecastDay
+    {
+        public string Day { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
+        public int MaxTemp { get; set; }
+        public int MinTemp { get; set; }
+        public string Description { get; set; } = string.Empty;
+    }
+}

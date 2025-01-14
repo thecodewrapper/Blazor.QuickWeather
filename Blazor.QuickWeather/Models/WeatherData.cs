@@ -20,16 +20,21 @@
         /// <summary>
         /// The humidity percentage (if provided by the API).
         /// </summary>
-        public int Humidity { get; set; }
+        public int? Humidity { get; set; }
 
         /// <summary>
         /// The wind speed in meters per second (if provided by the API).
         /// </summary>
-        public float WindSpeed { get; set; }
+        public float? WindSpeed { get; set; }
 
         /// <summary>
         /// Precipation in mm (if provided by the API).
         /// </summary>
-        public float Precipitation { get; set; }
+        public float? Precipitation { get; set; }
+
+        /// <summary>
+        /// Inlcudes icon code, if supported by the Api (currently OpenWeather supports this)
+        /// </summary>
+        public string Icon { get; set; }
     }
 }

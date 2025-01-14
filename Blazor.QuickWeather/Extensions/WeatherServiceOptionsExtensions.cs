@@ -9,7 +9,7 @@
             this WeatherServiceOptions options,
             string name,
             string apiUrl,
-            string apiKey) {
+            string apiKey = null) {
             options.ApiResources.Add(new WeatherApiResource
             {
                 Name = name,
