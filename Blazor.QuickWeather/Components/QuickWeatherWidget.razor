@@ -12,6 +12,7 @@
     <div class="current-weather">
         <div class="temperature">
             <span>@(Math.Round(WeatherData?.Temperature ?? 0))°</span>
+            <img src="@GetWeatherIconUrl(WeatherData?.Icon)" alt="@WeatherData?.Description" class="forecast-icon" />
         </div>
         <p class="description">@(WeatherData?.Description ?? "Fetching weather...")</p>
     </div>
@@ -25,7 +26,7 @@
                 <div class="forecast-day">
                     <span class="day">@day.Date</span>
                     <img src="@GetWeatherIconUrl(day.Icon)" alt="@day.Description" class="forecast-icon" />
-                    <span class="temp">@day.MaxTemperature° <small>@day.MinTemperature°</small></span>
+                    <span class="temp">@Math.Round(day.MaxTemperature)° <small>@Math.Round(day.MinTemperature)°</small></span>
                 </div>
             }
         </div>
@@ -65,7 +66,7 @@
 
         if (SelectedResource == null)
         {
-            SelectedResource = WeatherResource.OpenWeatherMap; // Default to OpenWeatherMap
+            SelectedResource = WeatherResource.WeatherApi;
         }
 
         var weatherService = WeatherServiceFactory.Create(SelectedResource.Value);
@@ -76,7 +77,7 @@
         {
             LastUpdated = DateTime.Now;
 
-            //ForecastData = (await weatherService.GetForecastWeatherAsync(request)).Forecast;
+            ForecastData = (await weatherService.GetForecastWeatherAsync(request)).Forecast;
         }
         else
         {
@@ -109,14 +110,14 @@
         }, null, updateIntervalMilliseconds, updateIntervalMilliseconds);
     }
 
-    private string GetWeatherIconUrl(string iconCode)
+    private string GetWeatherIconUrl(string icon)
     {
-        if (SelectedResource == WeatherResource.OpenWeatherMap)
+        return SelectedResource switch
         {
-            return $"https://openweathermap.org/img/wn/{iconCode}@2x.png";
-        }
-        // Add cases for other services if needed
-        return string.Empty;
+            WeatherResource.OpenWeatherMap => $"https://openweathermap.org/img/wn/{icon}@2x.png",
+            WeatherResource.WeatherApi => icon,
+            _ => string.Empty
+        };
     }
 
     public void Dispose()

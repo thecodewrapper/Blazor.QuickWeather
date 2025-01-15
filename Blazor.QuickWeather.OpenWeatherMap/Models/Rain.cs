@@ -1,4 +1,4 @@
-﻿namespace Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap
 {
     public class Rain
     {

@@ -27,6 +27,7 @@ namespace Blazor.QuickWeather.BlazorServer
             });
 
             builder.Services.AddOpenWeatherMap(builder.Configuration["WeatherApiResources:OpenWeatherMap:ApiKey"]);
+            builder.Services.AddWeatherApi(builder.Configuration["WeatherApiResources:WeatherApi:ApiKey"]);
 
             Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(builder.Configuration)

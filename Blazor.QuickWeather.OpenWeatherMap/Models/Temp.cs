@@ -1,4 +1,4 @@
-﻿namespace Blazor.QuickWeather.OpenWeatherMap.DailyForecastAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap
 {
     public class Temp
     {

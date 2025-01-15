@@ -1,5 +1,6 @@
 ﻿using Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI;
 using Blazor.QuickWeather.OpenWeatherMap.DailyForecastAPI;
+using Blazor.QuickWeather.OpenWeatherMap.OneCallAPI;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
@@ -49,7 +50,7 @@ namespace Blazor.QuickWeather.OpenWeatherMap
 
             ValidateApiKey(apiKey);
 
-            var forecastWeatherUrl = $"{Constants.OPENWEATHER_FORECASTWEATHER_DAILY_BASEURL}?lat={lat}&lon={lon}&cnt=7&appid={apiKey}&units=metric";
+            var forecastWeatherUrl = $"{Constants.OPENWEATHER_FORECASTWEATHER_DAILY_BASEURL}?lat={lat}&lon={lon}&cnt={cnt}&appid={apiKey}&units=metric";
             _logger.LogDebug("Calling OpenWeatherMap Daily Forecast API: {Url}", forecastWeatherUrl);
 
             var response = await _httpClient.GetAsync(forecastWeatherUrl);
@@ -63,6 +64,30 @@ namespace Blazor.QuickWeather.OpenWeatherMap
 
             if (forecastResponse == null) {
                 throw new Exception("Invalid response from OpenWeatherMap Daily Forecast API.");
+            }
+
+            return forecastResponse;
+        }
+
+        public async Task<OneCallApiResponse> GetOneCallAsync(string apiKey, double lat, double lon) {
+            _logger.LogDebug("GetOneCallAsync: ApiKey: {@ApiKey}, Lat: {@Lat}, Lon: {@Lon}", apiKey, lat, lon);
+
+            ValidateApiKey(apiKey);
+
+            var forecastWeatherUrl = $"{Constants.OPENWEATHER_ONECALL_BASEURL}?lat={lat}&lon={lon}&appid={apiKey}";
+            _logger.LogDebug("Calling OpenWeatherMap Daily OneCall API: {Url}", forecastWeatherUrl);
+
+            var response = await _httpClient.GetAsync(forecastWeatherUrl);
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var forecastResponse = JsonSerializer.Deserialize<OneCallApiResponse>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (forecastResponse == null) {
+                throw new Exception("Invalid response from OpenWeatherMap OneCall API.");
             }
 
             return forecastResponse;
