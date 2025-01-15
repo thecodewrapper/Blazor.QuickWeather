@@ -1,6 +1,6 @@
-﻿namespace Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI
 {
-    internal class Sys
+    public class Sys
     {
         public int Type { get; set; }
         public int Id { get; set; }

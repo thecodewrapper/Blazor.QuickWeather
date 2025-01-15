@@ -1,6 +1,6 @@
 ﻿namespace Blazor.QuickWeather
 {
-    public class WeatherData
+    public class CurrentWeatherData
     {
         /// <summary>
         /// The location for which the weather data is fetched.

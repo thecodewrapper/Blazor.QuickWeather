@@ -4,6 +4,6 @@ namespace Blazor.QuickWeather.Factories
 {
     internal interface IWeatherServiceFactory
     {
-        IWeatherService Create(string apiName);
+        IWeatherService Create(WeatherResource resource);
     }
 }

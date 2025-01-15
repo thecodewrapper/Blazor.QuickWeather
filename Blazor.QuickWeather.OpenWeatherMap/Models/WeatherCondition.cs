@@ -1,6 +1,6 @@
-﻿namespace Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap
 {
-    internal class WeatherCondition
+    public class WeatherCondition
     {
         public int Id { get; set; }
         public string Main { get; set; } = string.Empty;

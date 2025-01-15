@@ -23,12 +23,10 @@ namespace Blazor.QuickWeather.BlazorServer
             builder.Services.AddHttpClient();
             builder.Services.AddQuickWeather(options =>
             {
-                
-                options.AddApiResource("WeatherAPI", "https://api.weather.com/v1/forecast", "your-weather-api-key-1")
-                       .AddApiResource("OpenWeatherMap", builder.Configuration["WeatherApiResources:OpenWeatherMap:ApiUrl"], builder.Configuration["WeatherApiResources:OpenWeatherMap:ApiKey"])
-                       .AddApiResource("OpenMeteo", "https://api.open-meteo.com/v1/forecast")
-                       .SetDefaultApiResource("OpenWeatherMap");
+                // Additional configuration if needed
             });
+
+            builder.Services.AddOpenWeatherMap(builder.Configuration["WeatherApiResources:OpenWeatherMap:ApiKey"]);
 
             Log.Logger = new LoggerConfiguration()
                         .ReadFrom.Configuration(builder.Configuration)

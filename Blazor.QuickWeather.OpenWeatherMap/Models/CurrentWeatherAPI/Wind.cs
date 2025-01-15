@@ -1,6 +1,6 @@
-﻿namespace Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI
 {
-    internal class Wind
+    public class Wind
     {
         public double Speed { get; set; }
         public int Deg { get; set; }

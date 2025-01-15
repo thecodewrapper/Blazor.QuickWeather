@@ -20,4 +20,9 @@
     <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Blazor.QuickWeather.OpenWeatherMap\Blazor.QuickWeather.OpenWeatherMap.csproj" />
+    <ProjectReference Include="..\Blazor.QuickWeather.WeatherApi\Blazor.QuickWeather.WeatherApi.csproj" />
+  </ItemGroup>
+
 </Project>

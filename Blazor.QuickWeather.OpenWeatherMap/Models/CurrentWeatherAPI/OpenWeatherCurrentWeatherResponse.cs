@@ -1,8 +1,6 @@
-﻿using Blazor.QuickWeather.Models.WeatherApi;
-
-namespace Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI
 {
-    internal class CurrentWeatherResponse
+    public class OpenWeatherCurrentWeatherResponse
     {
         public Coordinates Coord { get; set; } = new Coordinates();
         public List<WeatherCondition> Weather { get; set; } = new List<WeatherCondition>();

@@ -1,82 +1,66 @@
-﻿using Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI;
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
+﻿using Blazor.QuickWeather;
+using Blazor.QuickWeather.Models;
+using Blazor.QuickWeather.OpenWeatherMap;
+using Blazor.QuickWeather.Services;
+using Microsoft.Extensions.Options;
 
-namespace Blazor.QuickWeather.Services
+public class OpenWeatherMapWeatherService : IWeatherService
 {
-    public class OpenWeatherMapWeatherService : IWeatherService
-    {
-        private readonly ILogger<OpenWeatherMapWeatherService> _logger;
-        private readonly HttpClient _httpClient;
-        private readonly WeatherApiResource _apiResource;
+    private readonly OpenWeatherClient _client;
+    private readonly IOptions<WeatherServiceOptions> _options;
 
-        public OpenWeatherMapWeatherService(ILogger<OpenWeatherMapWeatherService> logger, HttpClient httpClient, WeatherApiResource apiResource) {
-            _logger = logger;
-            _httpClient = httpClient;
-            _apiResource = apiResource;
+    public WeatherResource Resource => WeatherResource.OpenWeatherMap;
 
-            // Validate the API key
-            if (string.IsNullOrEmpty(_apiResource.ApiKey)) {
-                var message = "API key is required for OpenWeatherMap. Please provide a valid API key.";
-                _logger.LogError(message);
-                throw new ArgumentException(message);
-            }
+    public OpenWeatherMapWeatherService(OpenWeatherClient client, IOptions<WeatherServiceOptions> options) {
+        _client = client ?? throw new ArgumentNullException(nameof(client));
+        _options = options ?? throw new ArgumentNullException(nameof(options));
+    }
+
+    public async Task<CurrentWeatherData> GetCurrentWeatherAsync(WeatherRequest request) {
+        if (request.Latitude == 0 || request.Longitude == 0) {
+            throw new ArgumentException("Latitude and Longitude are required for OpenWeatherMap.");
         }
 
-        public async Task<WeatherData> GetWeatherAsync(string location) {
-            _logger.LogInformation("Fetching weather data for {Location} using OpenWeatherMap.", location);
+        // Retrieve the API key from the options
+        var apiKey = _options.Value.OpenWeatherMap.ApiKey;
 
-            try {
-                // Build URL (Replace location handling with actual geocoding logic if necessary)
-                var (latitude, longitude) = GetCoordinatesForLocation(location);
-                var url = $"{_apiResource.ApiUrl}?lat={latitude}&lon={longitude}&appid={_apiResource.ApiKey}&units=metric";
+        // Call the OpenWeatherMap client for current weather
+        var response = await _client.GetWeatherAsync(apiKey, request.Latitude, request.Longitude);
 
-                _logger.LogDebug("Constructed OpenWeatherMap API URL: {Url}", url);
+        return new CurrentWeatherData
+        {
+            Location = response.Name,
+            Temperature = (float)response.Main.Temp,
+            Description = response.Weather.FirstOrDefault()?.Description ?? "No description",
+            Humidity = response.Main.Humidity,
+            WindSpeed = (float)response.Wind.Speed,
+            Precipitation = (float?)response.Rain?.OneHour ?? 0.0f,
+            Icon = response.Weather.FirstOrDefault()?.Icon ?? string.Empty
+        };
+    }
 
-                var response = await _httpClient.GetAsync(url);
-                if (!response.IsSuccessStatusCode) {
-                    _logger.LogError("Failed to fetch weather data for {Location}. Status Code: {StatusCode}, Reason: {ReasonPhrase}",
-                        location, response.StatusCode, response.ReasonPhrase);
-                    response.EnsureSuccessStatusCode(); // Throws exception to halt execution
-                }
-
-                var json = await response.Content.ReadAsStringAsync();
-                _logger.LogDebug("Received JSON response from OpenWeatherMap: {Json}", json);
-                var weatherResponse = JsonSerializer.Deserialize<CurrentWeatherResponse>(json, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
-
-                if (weatherResponse == null) {
-                    throw new Exception("Invalid response from OpenWeatherMap API.");
-                }
-
-                _logger.LogInformation("Successfully fetched weather data for {Location}.", location);
-
-                return new WeatherData
-                {
-                    Location = weatherResponse.Name,
-                    Temperature = (float)weatherResponse.Main.Temp,
-                    Description = weatherResponse.Weather.FirstOrDefault()?.Description ?? "No description",
-                    Humidity = weatherResponse.Main.Humidity,
-                    WindSpeed = (float)weatherResponse.Wind.Speed,
-                    Precipitation = (float?)weatherResponse.Rain?.OneHour ?? 0.0f,
-                    Icon = weatherResponse.Weather.FirstOrDefault()?.Icon
-                };
-            }
-            catch (Exception) {
-
-                throw;
-            }
+    public async Task<ForecastWeatherData> GetForecastWeatherAsync(WeatherRequest request) {
+        if (request.Latitude == 0 || request.Longitude == 0) {
+            throw new ArgumentException("Latitude and Longitude are required for OpenWeatherMap.");
         }
 
-        private (double Lat, double Lon) GetCoordinatesForLocation(string location) {
-            return location switch
+        // Retrieve the API key from the options
+        var apiKey = _options.Value.OpenWeatherMap.ApiKey;
+
+        // Call the OpenWeatherMap client for daily forecast
+        var response = await _client.GetForecastDailyAsync(apiKey, request.Latitude, request.Longitude, 7);
+
+        return new ForecastWeatherData
+        {
+            Location = response.City.Name,
+            Forecast = response.List.Select(f => new ForecastDay
             {
-                "London" => (51.5074, -0.1278),
-                "New York" => (40.7128, -74.0060),
-                _ => throw new Exception("Unsupported location. Use geocoding logic.")
-            };
-        }
+                Date = DateTimeOffset.FromUnixTimeSeconds(f.Dt).DateTime.ToShortDateString(),
+                MaxTemperature = (float)f.Temp.Max,
+                MinTemperature = (float)f.Temp.Min,
+                Description = f.Weather.FirstOrDefault()?.Description ?? "No description",
+                Icon = f.Weather.FirstOrDefault()?.Icon ?? string.Empty
+            }).ToList()
+        };
     }
 }

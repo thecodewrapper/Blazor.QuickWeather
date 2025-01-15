@@ -2,6 +2,8 @@
 {
     public class WeatherServiceOptions
     {
-        public List<WeatherApiResource> ApiResources { get; internal set; } = new();
+        public WeatherApiResource OpenWeatherMap { get; internal set; } = new();
+        public WeatherApiResource WeatherApi { get; internal set; } = new();
+        public WeatherApiResource OpenMeteo { get; internal set; } = new();
     }
 }

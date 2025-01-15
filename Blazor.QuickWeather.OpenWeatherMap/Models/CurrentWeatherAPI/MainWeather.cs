@@ -1,6 +1,6 @@
-﻿namespace Blazor.QuickWeather.Models.OpenWeather.CurrentWeatherAPI
+﻿namespace Blazor.QuickWeather.OpenWeatherMap.CurrentWeatherAPI
 {
-    internal class MainWeather
+    public class MainWeather
     {
         public double Temp { get; set; }
         public double FeelsLike { get; set; }
