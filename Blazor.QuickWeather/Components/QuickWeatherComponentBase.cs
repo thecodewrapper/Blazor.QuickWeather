@@ -80,7 +80,7 @@ namespace Blazor.QuickWeather.Components
 
         protected string GetWeatherIconUrl(string icon, int code, bool isDayTime) {
             if (_useCustomIcons) {
-                StringBuilder sb = new StringBuilder("icons/animated/");
+                StringBuilder sb = new StringBuilder("_content/Blazor.QuickWeather/icons/animated/");
                 switch (Source) {
                     case WeatherDataSource.OpenWeatherMap: sb.Append(WeatherIconMapper.GetOpenWeatherMapIcon(code, isDayTime)); break;
                     case WeatherDataSource.WeatherApi: sb.Append(WeatherIconMapper.GetWeatherApiIcon(code, isDayTime)); break;

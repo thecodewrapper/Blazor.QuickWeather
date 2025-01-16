@@ -30,7 +30,7 @@
             {
                 <div class="col forecast-item">
                     <div class="forecast-day">@day.Date.ToString("ddd")</div>
-                    <img src="@GetWeatherIconUrl(day.Icon, day.Code, day.IsDay)" alt="@day.Description" class="forecast-icon" />
+                    <img src="@GetWeatherIconUrl(day.Icon, day.Code, day.IsDay)" alt="@day.Description" class="forecast-icon" width="40" height="40" />
                     <div class="forecast-temp">@Math.Round(day.MaxTemperature)° / @Math.Round(day.MinTemperature)°</div>
                     <div class="precipitation">
                         @(day.PrecipitationProbability)% <i class="fa fa-umbrella"></i>
