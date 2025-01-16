@@ -1,140 +1,115 @@
 ﻿.weather-widget {
-    background: white;
+    background: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    max-width: 100%;
     font-family: 'Arial', sans-serif;
-    text-align: center;
     color: #333;
+    max-width: 600px;
+    margin: 0 auto;
     position: relative;
-    margin: 0 auto; /* Center align within its container */
 }
 
-.current-weather-header {
+.current-weather-icon img {
+    width: 100%;
+    height: auto;
+}
+
+.current-temp {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.current-condition {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+}
+
+.location {
+    font-size: 18px;
+    font-weight: bold;
+    color: #222;
+    margin-top: 10px;
+}
+
+.feels-like {
+    font-size: 14px;
+    color: #777;
+}
+
+.forecast-item {
+    padding: 10px 5px;
+}
+
+.forecast-day {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.forecast-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 5px;
+}
+
+.forecast-temp {
+    font-size: 12px;
+    color: #555;
+}
+
+.precipitation {
+    font-size: 12px;
+    color: #777;
+}
+
+.wind {
+    font-size: 12px;
+    color: #555;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    justify-content: center;
+    gap: 5px;
+    color: #777
 }
 
-    .current-weather-header .location {
-        font-size: 18px;
-        font-weight: bold;
-        color: #555;
-        margin: 0;
-    }
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
 
+/* Refresh Button */
 .refresh-button {
-    background: #f5f5f5; /* Light gray background */
-    border: 1px solid #ddd; /* Soft border */
-    color: #555; /* Gray icon color */
-    font-size: 20px;
-    border-radius: 50%; /* Circular button */
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #666;
+    font-size: 18px;
+    border-radius: 50%;
     cursor: pointer;
-    width: 36px; /* Fixed size */
+    width: 36px;
     height: 36px;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute; /* Positioned outside the padding */
-    top: -10px; /* Adjusted to move outside padding */
-    right: -10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
     .refresh-button:hover {
-        background-color: #007bff; /* Blue background on hover */
-        color: white; /* White icon color on hover */
-        border-color: #007bff; /* Border matches hover color */
-        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Enhanced shadow on hover */
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+        box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
     }
 
     .refresh-button:focus {
-        outline: none; /* Remove focus outline */
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Add focus shadow */
+        outline: none;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     }
-
-.current-weather {
-    margin-bottom: 20px;
-}
-
-    .current-weather .temperature {
-        font-size: 48px;
-        font-weight: bold;
-        margin: 10px 0;
-    }
-
-    .current-weather .description {
-        font-size: 14px;
-        color: #777;
-    }
-
-.forecast {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.forecast-day {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 0;
-    border-bottom: 1px solid #ddd;
-}
-
-    .forecast-day:last-child {
-        border-bottom: none;
-    }
-
-    .forecast-day .day {
-        font-size: 14px;
-        font-weight: bold;
-        color: #555;
-    }
-
-    .forecast-day .forecast-icon {
-        width: 32px;
-        height: 32px;
-    }
-
-    .forecast-day .temp {
-        font-size: 14px;
-        color: #333;
-    }
-
-        .forecast-day .temp small {
-            color: #999;
-            font-size: 12px;
-        }
-
-.weather-footer {
-    margin-top: 15px;
-    text-align: right;
-    font-size: 12px;
-    color: #bdc3c7;
-}
-
-/* Media Query for Smaller Screens */
-@media (max-width: 576px) {
-    .current-weather-header {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .forecast {
-        flex-direction: column;
-    }
-
-    .forecast-day {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-    }
-
-    .weather-widget {
-        padding: 15px;
-    }
-}

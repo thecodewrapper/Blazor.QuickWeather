@@ -36,9 +36,10 @@ namespace Blazor.QuickWeather.Services
                     Temperature = (float)weatherApiResponse.Current.TempC,
                     Description = weatherApiResponse.Current.Condition.Text,
                     Humidity = weatherApiResponse.Current.Humidity,
-                    WindSpeed = (float)(weatherApiResponse.Current.WindKph / 3.6), // Convert kph to m/s
+                    WindSpeed = (float)(weatherApiResponse.Current.WindKph), // Convert kph to m/s
                     Precipitation = (float)weatherApiResponse.Current.PrecipMm,
-                    Icon = weatherApiResponse.Current.Condition.Icon
+                    Icon = weatherApiResponse.Current.Condition.Icon,
+                    FeelsLike = (float)weatherApiResponse.Current.FeelsLikeC
                 };
             }
             catch (Exception ex) {
@@ -62,11 +63,14 @@ namespace Blazor.QuickWeather.Services
                     Location = $"{forecastApiResponse.Location.Name}, {forecastApiResponse.Location.Country}",
                     Forecast = forecastApiResponse.Forecast.ForecastDay.Select(day => new Blazor.QuickWeather.Models.ForecastDay
                     {
-                        Date = day.Date,
+                        Date = DateTime.Parse(day.Date),
                         MaxTemperature = (float)day.Day.MaxtempC,
                         MinTemperature = (float)day.Day.MintempC,
                         Description = day.Day.Condition.Text,
-                        Icon = day.Day.Condition.Icon
+                        Icon = day.Day.Condition.Icon,
+                        PrecipitationProbability = day.Day.DailyChanceOfRain,
+                        WindSpeed = day.Day.MaxwindKph
+
                     }).ToList()
                 };
             }

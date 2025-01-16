@@ -67,7 +67,7 @@ public class OpenWeatherMapWeatherService : IWeatherService
                 Location = $"Lat: {response.Lat}, Lon: {response.Lon}",
                 Forecast = response.Daily.Select(day => new ForecastDay
                 {
-                    Date = DateTimeOffset.FromUnixTimeSeconds(day.Dt).DateTime.ToShortDateString(),
+                    Date = DateTimeOffset.FromUnixTimeSeconds(day.Dt).DateTime,
                     MaxTemperature = (float)day.Temp.Max,
                     MinTemperature = (float)day.Temp.Min,
                     Description = day.Weather.FirstOrDefault()?.Description ?? "No description",

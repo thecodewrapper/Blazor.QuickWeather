@@ -13,6 +13,11 @@
         public float Temperature { get; set; }
 
         /// <summary>
+        /// The "feels like" temperature.
+        /// </summary>
+        public float FeelsLike { get; set; }
+
+        /// <summary>
         /// A brief description of the current weather (e.g., "clear sky").
         /// </summary>
         public string Description { get; set; } = string.Empty;
