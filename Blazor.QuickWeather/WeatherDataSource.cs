@@ -1,9 +1,9 @@
 ﻿namespace Blazor.QuickWeather
 {
-    public enum WeatherResource
+    public enum WeatherDataSource
     {
-        OpenWeatherMap,
         WeatherApi,
+        OpenWeatherMap,
         OpenMeteo
     }
 }

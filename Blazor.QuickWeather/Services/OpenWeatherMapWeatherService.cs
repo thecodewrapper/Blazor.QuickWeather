@@ -11,7 +11,7 @@ public class OpenWeatherMapWeatherService : IWeatherService
     private readonly OpenWeatherClient _client;
     private readonly IOptions<WeatherServiceOptions> _options;
 
-    public WeatherResource Resource => WeatherResource.OpenWeatherMap;
+    public WeatherDataSource Resource => WeatherDataSource.OpenWeatherMap;
 
     public OpenWeatherMapWeatherService(ILogger<OpenWeatherMapWeatherService> logger, OpenWeatherClient client, IOptions<WeatherServiceOptions> options) {
         _logger = logger;

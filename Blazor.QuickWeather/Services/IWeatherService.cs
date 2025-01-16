@@ -4,7 +4,7 @@ namespace Blazor.QuickWeather.Services
 {
     public interface IWeatherService
     {
-        WeatherResource Resource { get; }
+        WeatherDataSource Resource { get; }
         Task<CurrentWeatherData> GetCurrentWeatherAsync(WeatherRequest request);
         Task<ForecastWeatherData> GetForecastWeatherAsync(WeatherRequest request);
     }

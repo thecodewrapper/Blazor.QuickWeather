@@ -11,7 +11,7 @@ namespace Blazor.QuickWeather.Services
         private readonly WeatherApiClient _client;
         private readonly IOptions<WeatherServiceOptions> _options;
 
-        public WeatherResource Resource => WeatherResource.WeatherApi;
+        public WeatherDataSource Resource => WeatherDataSource.WeatherApi;
 
         public WeatherApiWeatherService(ILogger<WeatherApiWeatherService> logger, WeatherApiClient client, IOptions<WeatherServiceOptions> options) {
             _logger = logger;

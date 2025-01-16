@@ -11,7 +11,7 @@ namespace Blazor.QuickWeather.Factories
             _weatherServices = weatherServices ?? throw new ArgumentNullException(nameof(weatherServices));
         }
 
-        public IWeatherService Create(WeatherResource resource) {
+        public IWeatherService Create(WeatherDataSource resource) {
             var service = _weatherServices.FirstOrDefault(ws => ws.Resource == resource);
 
             if (service == null) {

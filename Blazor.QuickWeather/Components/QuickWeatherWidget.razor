@@ -5,7 +5,9 @@
     <!-- Current Weather Header with Refresh Button -->
     <div class="current-weather-header">
         <h2 class="location">@(WeatherData?.Location ?? "Loading...")</h2>
-        <button class="refresh-button" @onclick="OnDemandUpdate" title="Refresh">🔄</button>
+        <button class="refresh-button" @onclick="OnDemandUpdate" title="Refresh">
+            ↺
+        </button>
     </div>
 
     <!-- Current Weather Section -->
@@ -34,15 +36,18 @@
 
     <!-- Footer with Last Updated -->
     <div class="weather-footer">
-        <p>Last updated: @LastUpdated.ToString("HH:mm:ss") <br />Source: @SelectedResource</p>
+        <p>Last updated: @LastUpdated.ToString("HH:mm:ss") <br />Source: @Source</p>
     </div>
 </div>
 
 @code {
     [Parameter] public string Location { get; set; } = "London";
-    [Parameter] public WeatherResource? SelectedResource { get; set; }
+    [Parameter] public double Lon { get; set; }
+    [Parameter] public double Lat { get; set; }
+    [Parameter] public WeatherDataSource? Source { get; set; }
     [Parameter] public int UpdateIntervalSeconds { get; set; } = 30;
-    private List<ForecastDay>? ForecastData;
+    [Parameter] public bool Forecast { get; set; } = false;
+    private List<ForecastDay>? ForecastData = new();
 
     private CurrentWeatherData? WeatherData;
     private Timer? UpdateTimer;
@@ -59,17 +64,17 @@
         var request = new WeatherRequest
             {
                 CityName = Location,
-                Longitude = 33.4299,  // Replace with actual longitude if available
-                Latitude = 35.1264,   // Replace with actual latitude if available
-                IpAddress = string.Empty // Optionally use the user's IP address
+                Longitude = Lon,
+                Latitude = Lat,
+                IpAddress = string.Empty
             };
 
-        if (SelectedResource == null)
+        if (Source == null)
         {
-            SelectedResource = WeatherResource.WeatherApi;
+            Source = WeatherDataSource.WeatherApi;
         }
 
-        var weatherService = WeatherServiceFactory.Create(SelectedResource.Value);
+        var weatherService = WeatherServiceFactory.Create(Source.Value);
 
         WeatherData = await weatherService.GetCurrentWeatherAsync(request);
 
@@ -77,7 +82,9 @@
         {
             LastUpdated = DateTime.Now;
 
-            ForecastData = (await weatherService.GetForecastWeatherAsync(request)).Forecast;
+            if (Forecast){
+                ForecastData = (await weatherService.GetForecastWeatherAsync(request))?.Forecast;
+            }
         }
         else
         {
@@ -112,10 +119,10 @@
 
     private string GetWeatherIconUrl(string icon)
     {
-        return SelectedResource switch
+        return Source switch
         {
-            WeatherResource.OpenWeatherMap => $"https://openweathermap.org/img/wn/{icon}@2x.png",
-            WeatherResource.WeatherApi => icon,
+            WeatherDataSource.OpenWeatherMap => $"https://openweathermap.org/img/wn/{icon}@2x.png",
+            WeatherDataSource.WeatherApi => icon,
             _ => string.Empty
         };
     }
