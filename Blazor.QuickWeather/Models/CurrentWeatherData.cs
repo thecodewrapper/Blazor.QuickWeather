@@ -41,5 +41,15 @@
         /// Inlcudes icon code, if supported by the Api (currently OpenWeather supports this)
         /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        /// The weather condition code
+        /// </summary>
+        public int Code { get; set; }
+
+        /// <summary>
+        /// Whether it is daytime or not
+        /// </summary>
+        public bool IsDay { get; set; }
     }
 }

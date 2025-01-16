@@ -3,7 +3,6 @@
     public enum WeatherDataSource
     {
         WeatherApi,
-        OpenWeatherMap,
-        OpenMeteo
+        OpenWeatherMap
     }
 }

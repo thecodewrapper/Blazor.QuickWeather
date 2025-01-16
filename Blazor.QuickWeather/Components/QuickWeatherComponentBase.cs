@@ -1,6 +1,8 @@
 ﻿using Blazor.QuickWeather.Factories;
 using Blazor.QuickWeather.Models;
+using Blazor.QuickWeather.Utilities;
 using Microsoft.AspNetCore.Components;
+using System.Text;
 
 namespace Blazor.QuickWeather.Components
 {
@@ -18,6 +20,7 @@ namespace Blazor.QuickWeather.Components
         protected CurrentWeatherData? WeatherData;
         protected Timer? UpdateTimer;
         protected DateTime LastUpdated;
+        protected bool _useCustomIcons = true;
 
         protected override async Task OnInitializedAsync() {
             await LoadWeatherData();
@@ -75,7 +78,16 @@ namespace Blazor.QuickWeather.Components
             }, null, updateIntervalMilliseconds, updateIntervalMilliseconds);
         }
 
-        protected string GetWeatherIconUrl(string icon) {
+        protected string GetWeatherIconUrl(string icon, int code, bool isDayTime) {
+            if (_useCustomIcons) {
+                StringBuilder sb = new StringBuilder("icons/animated/");
+                switch (Source) {
+                    case WeatherDataSource.OpenWeatherMap: sb.Append(WeatherIconMapper.GetOpenWeatherMapIcon(code, isDayTime)); break;
+                    case WeatherDataSource.WeatherApi: sb.Append(WeatherIconMapper.GetWeatherApiIcon(code, isDayTime)); break;
+                }
+                return sb.ToString();
+            }
+
             return Source switch
             {
                 WeatherDataSource.OpenWeatherMap => $"https://openweathermap.org/img/wn/{icon}@2x.png",

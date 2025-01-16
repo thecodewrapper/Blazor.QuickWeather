@@ -2,6 +2,7 @@
 using Blazor.QuickWeather.WeatherApi;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Globalization;
 
 namespace Blazor.QuickWeather.Services
 {
@@ -39,7 +40,9 @@ namespace Blazor.QuickWeather.Services
                     WindSpeed = (float)(weatherApiResponse.Current.WindKph), // Convert kph to m/s
                     Precipitation = (float)weatherApiResponse.Current.PrecipMm,
                     Icon = weatherApiResponse.Current.Condition.Icon,
-                    FeelsLike = (float)weatherApiResponse.Current.FeelsLikeC
+                    FeelsLike = (float)weatherApiResponse.Current.FeelsLikeC,
+                    Code = weatherApiResponse.Current.Condition.Code,
+                    IsDay = weatherApiResponse.Current.IsDay == 1
                 };
             }
             catch (Exception ex) {
@@ -69,7 +72,9 @@ namespace Blazor.QuickWeather.Services
                         Description = day.Day.Condition.Text,
                         Icon = day.Day.Condition.Icon,
                         PrecipitationProbability = day.Day.DailyChanceOfRain,
-                        WindSpeed = day.Day.MaxwindKph
+                        WindSpeed = day.Day.MaxwindKph,
+                        Code = day.Day.Condition.Code,
+                        IsDay = true
 
                     }).ToList()
                 };

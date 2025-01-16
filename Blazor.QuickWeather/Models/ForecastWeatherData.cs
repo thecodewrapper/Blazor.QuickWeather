@@ -15,5 +15,15 @@
         public string Icon { get; set; } = string.Empty;
         public int PrecipitationProbability { get; set; }
         public decimal WindSpeed { get; set; }
+
+        /// <summary>
+        /// The weather condition code
+        /// </summary>
+        public int Code { get; set; }
+
+        /// <summary>
+        /// Whether it is daytime or not
+        /// </summary>
+        public bool IsDay { get; set; }
     }
 }

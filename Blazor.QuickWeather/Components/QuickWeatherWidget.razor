@@ -9,7 +9,7 @@
     <!-- Header Section -->
     <div class="row weather-header">
         <div class="col-4 current-weather-icon">
-            <img src="@GetWeatherIconUrl(WeatherData?.Icon)" alt="@WeatherData?.Description" class="img-fluid" />
+            <img src="@GetWeatherIconUrl(WeatherData?.Icon, WeatherData?.Code ?? 0, WeatherData?.IsDay ?? true)" alt="@WeatherData?.Description" class="img-fluid" />
         </div>
         <div class="col-8 current-weather-details">
             <h2 class="current-temp">@Math.Round(WeatherData?.Temperature ?? 0)°</h2>
@@ -30,7 +30,7 @@
             {
                 <div class="col forecast-item">
                     <div class="forecast-day">@day.Date.ToString("ddd")</div>
-                    <img src="@GetWeatherIconUrl(day.Icon)" alt="@day.Description" class="forecast-icon" />
+                    <img src="@GetWeatherIconUrl(day.Icon, day.Code, day.IsDay)" alt="@day.Description" class="forecast-icon" />
                     <div class="forecast-temp">@Math.Round(day.MaxTemperature)° / @Math.Round(day.MinTemperature)°</div>
                     <div class="precipitation">
                         @(day.PrecipitationProbability)% <i class="fa fa-umbrella"></i>
