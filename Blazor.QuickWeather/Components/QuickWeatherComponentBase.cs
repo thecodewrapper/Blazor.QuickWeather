@@ -2,6 +2,7 @@
 using Blazor.QuickWeather.Models;
 using Blazor.QuickWeather.Utilities;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System.Text;
 
 namespace Blazor.QuickWeather.Components
@@ -9,30 +10,58 @@ namespace Blazor.QuickWeather.Components
     public class QuickWeatherComponentBase : ComponentBase
     {
         [Inject] IWeatherServiceFactory WeatherServiceFactory { get; set; }
-        [Parameter] public string Location { get; set; } = "London";
-        [Parameter] public double Lon { get; set; }
-        [Parameter] public double Lat { get; set; }
+        [Inject] IJSRuntime JSRuntime { get; set; }
+        [Parameter] public string Location { get; set; }
+        [Parameter] public double? Lon { get; set; }
+        [Parameter] public double? Lat { get; set; }
+
+        /// <summary>
+        /// The source of the weather information. If not provided, will pick the first available
+        /// </summary>
         [Parameter] public WeatherDataSource? Source { get; set; }
-        [Parameter] public int UpdateIntervalSeconds { get; set; } = 30;
-        [Parameter] public bool Forecast { get; set; } = false;
+
+        /// <summary>
+        /// The update interval in seconds. Defaults to 180
+        /// </summary>
+        [Parameter] public int UpdateIntervalSeconds { get; set; } = 180;
+
+        /// <summary>
+        /// Whether to include 7-day forecast data
+        /// </summary>
+        [Parameter] public bool IncludeForecast { get; set; } = false;
+
+        /// <summary>
+        /// Whether to use the widget icons or icons from the weather source
+        /// </summary>
+        [Parameter] public bool UseSourceIcons { get; set; } = true;
+
         protected List<ForecastDay>? ForecastData = new();
 
         protected CurrentWeatherData? WeatherData;
         protected Timer? UpdateTimer;
         protected DateTime LastUpdated;
-        protected bool _useCustomIcons = true;
+        protected Geolocation _userLocation;
 
         protected override async Task OnInitializedAsync() {
-            await LoadWeatherData();
-            StartTimer();
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender) {
+            if (firstRender) {
+                if (Lat == null || Lon == null) {
+                    await GetUserLocationAsync();
+                    await LoadWeatherData();
+                    StateHasChanged();
+                    StartTimer();
+                }
+            }
         }
 
         private async Task LoadWeatherData() {
             var request = new WeatherRequest
             {
                 CityName = Location,
-                Longitude = Lon,
-                Latitude = Lat,
+                Longitude = Lon ?? _userLocation.Longitude,
+                Latitude = Lat ?? _userLocation.Latitude,
                 IpAddress = string.Empty
             };
 
@@ -47,12 +76,21 @@ namespace Blazor.QuickWeather.Components
             if (WeatherData != null) {
                 LastUpdated = DateTime.Now;
 
-                if (Forecast) {
+                if (IncludeForecast) {
                     ForecastData = (await weatherService.GetForecastWeatherAsync(request))?.Forecast;
                 }
             }
             else {
                 ForecastData = null;
+            }
+        }
+
+        private async Task GetUserLocationAsync() {
+            try {
+                _userLocation = await JSRuntime.InvokeAsync<Geolocation>("getUserLocation");
+            }
+            catch (Exception ex) {
+                Console.WriteLine($"Could not retrieve user location: {ex.Message}");
             }
         }
 
@@ -79,7 +117,7 @@ namespace Blazor.QuickWeather.Components
         }
 
         protected string GetWeatherIconUrl(string icon, int code, bool isDayTime) {
-            if (_useCustomIcons) {
+            if (!UseSourceIcons) {
                 StringBuilder sb = new StringBuilder("_content/Blazor.QuickWeather/icons/animated/");
                 switch (Source) {
                     case WeatherDataSource.OpenWeatherMap: sb.Append(WeatherIconMapper.GetOpenWeatherMapIcon(code, isDayTime)); break;

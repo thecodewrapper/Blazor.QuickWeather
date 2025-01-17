@@ -1,0 +1,19 @@
+﻿@inherits QuickWeatherComponentBase
+
+<div class="widget">
+    <button class="refresh-button" @onclick="OnDemandUpdate" title="Refresh">
+        ↺
+    </button>
+    @if (WeatherData != null)
+    {
+        <img src="@GetWeatherIconUrl(WeatherData.Icon, WeatherData.Code, WeatherData.IsDay)" alt="@WeatherData.Description" class="icon" />
+        <div>
+            <div class="degree">@(Math.Round(WeatherData.Temperature))°</div>
+            <div class="country">@WeatherData.Location</div>
+        </div>
+    }
+    else
+    {
+        <p>Loading weather data...</p>
+    }
+</div>

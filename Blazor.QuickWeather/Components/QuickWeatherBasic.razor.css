@@ -5,7 +5,7 @@
     padding: 20px;
     font-family: 'Arial', sans-serif;
     color: #333;
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
     position: relative;
 }
@@ -47,7 +47,14 @@
     font-size: 14px;
     font-weight: bold;
     color: #333;
+}
+
+.forecast-date {
+    font-size: 12px;
+    color: #333;
     margin-bottom: 5px;
+    font-weight: bold;
+    margin-top: -5px;
 }
 
 .forecast-icon {
@@ -88,18 +95,20 @@ hr {
     border: 1px solid #ddd;
     color: #666;
     font-size: 18px;
-    border-radius: 50%;
+    border-radius: 20%;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    width: 25px;
+    height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 10px;
-    right: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    bottom: 0px;
+    left: 0px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 10px;
+    margin-bottom: 10px;
 }
 
     .refresh-button:hover {
@@ -117,6 +126,6 @@ hr {
 /* Footer */
 .weather-footer {
     font-size: 12px; /* Smaller text for footer */
-    text-color: #999; /* Light gray color */
+    color: #999; /* Light gray color */
     text-align: right;
 }

@@ -22,10 +22,8 @@ public class OpenWeatherMapWeatherService : IWeatherService
 
     public async Task<CurrentWeatherData> GetCurrentWeatherAsync(WeatherRequest request) {
         try {
-            if (request.Latitude == 0 || request.Longitude == 0) {
-                _logger.LogError("Latitude and Longitude are required for OpenWeatherMap.");
+            if (!IsRequestValid(request))
                 return null;
-            }
 
             // Retrieve the API key from the options
             var apiKey = _options.Value.OpenWeatherMap.ApiKey;
@@ -41,6 +39,7 @@ public class OpenWeatherMapWeatherService : IWeatherService
                 Humidity = response.Main.Humidity,
                 WindSpeed = (float)response.Wind.Speed,
                 Precipitation = (float?)response.Rain?.OneHour ?? 0.0f,
+                FeelsLike = (float)response.Main.FeelsLike,
                 Icon = response.Weather.FirstOrDefault()?.Icon ?? string.Empty,
                 Code = response.Weather.FirstOrDefault()?.Id ?? 0,
                 IsDay = IsDayTime(response)
@@ -54,10 +53,8 @@ public class OpenWeatherMapWeatherService : IWeatherService
 
     public async Task<ForecastWeatherData> GetForecastWeatherAsync(WeatherRequest request) {
         try {
-            if (request.Latitude == 0 || request.Longitude == 0) {
-                _logger.LogError("Latitude and Longitude are required for OpenWeatherMap.");
+            if (!IsRequestValid(request))
                 return null;
-            }
 
             // Retrieve the API key from the options
             var apiKey = _options.Value.OpenWeatherMap.ApiKey;
@@ -94,5 +91,13 @@ public class OpenWeatherMapWeatherService : IWeatherService
 
         // Determine if the current time is between sunrise and sunset
         return currentTime >= sunrise && currentTime < sunset;
+    }
+
+    private bool IsRequestValid(WeatherRequest request) {
+        if (request.Longitude == 0 || request.Latitude == 0) {
+            _logger.LogError("Longitude/latitude is required for OpenWeatherMap.");
+            return false;
+        }
+        return true;
     }
 }

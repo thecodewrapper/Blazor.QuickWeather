@@ -22,14 +22,12 @@ namespace Blazor.QuickWeather.Services
 
         public async Task<CurrentWeatherData> GetCurrentWeatherAsync(WeatherRequest request) {
             try {
-                if (string.IsNullOrEmpty(request.CityName)) {
-                    _logger.LogError("City name is required for WeatherApi.");
+                if (!IsRequestValid(request))
                     return null;
-                }
 
                 var apiKey = _options.Value.WeatherApi.ApiKey;
 
-                var weatherApiResponse = await _client.GetWeatherAsync(apiKey, request.CityName);
+                var weatherApiResponse = await _client.GetWeatherAsync(apiKey, request.Latitude, request.Longitude);
 
                 return new CurrentWeatherData
                 {
@@ -37,7 +35,7 @@ namespace Blazor.QuickWeather.Services
                     Temperature = (float)weatherApiResponse.Current.TempC,
                     Description = weatherApiResponse.Current.Condition.Text,
                     Humidity = weatherApiResponse.Current.Humidity,
-                    WindSpeed = (float)(weatherApiResponse.Current.WindKph), // Convert kph to m/s
+                    WindSpeed = (float)(weatherApiResponse.Current.WindKph),
                     Precipitation = (float)weatherApiResponse.Current.PrecipMm,
                     Icon = weatherApiResponse.Current.Condition.Icon,
                     FeelsLike = (float)weatherApiResponse.Current.FeelsLikeC,
@@ -53,18 +51,18 @@ namespace Blazor.QuickWeather.Services
 
         public async Task<ForecastWeatherData> GetForecastWeatherAsync(WeatherRequest request) {
             try {
-                if (string.IsNullOrEmpty(request.CityName)) {
-                    _logger.LogError("City name is required for WeatherApi.");
-                }
+                if (!IsRequestValid(request))
+                    return null;
 
                 var apiKey = _options.Value.WeatherApi.ApiKey;
 
-                var forecastApiResponse = await _client.GetForecastDailyAsync(apiKey, request.CityName, 7);
+                //7-day forecast fixed. You can add the number of days as a property in the WeatherRequest model to pass it on. Reason is not there now, is because not all weather APIs support defining the number of days in the request.
+                var forecastApiResponse = await _client.GetForecastDailyAsync(apiKey, request.Latitude, request.Longitude, 7);
 
                 return new ForecastWeatherData
                 {
                     Location = $"{forecastApiResponse.Location.Name}, {forecastApiResponse.Location.Country}",
-                    Forecast = forecastApiResponse.Forecast.ForecastDay.Select(day => new Blazor.QuickWeather.Models.ForecastDay
+                    Forecast = forecastApiResponse.Forecast.ForecastDay.Select(day => new Models.ForecastDay
                     {
                         Date = DateTime.Parse(day.Date),
                         MaxTemperature = (float)day.Day.MaxtempC,
@@ -83,6 +81,14 @@ namespace Blazor.QuickWeather.Services
                 _logger.LogError("Exception caught: {@ex}", ex);
                 return null;
             }
+        }
+
+        private bool IsRequestValid(WeatherRequest request) {
+            if (string.IsNullOrEmpty(request.CityName) && (request.Longitude == 0 || request.Latitude == 0)) {
+                _logger.LogError("City name or longitude/latitude is required for WeatherApi.");
+                return false;
+            }
+            return true;
         }
     }
 }

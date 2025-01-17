@@ -12,13 +12,44 @@ namespace Blazor.QuickWeather.WeatherApi
             _logger = logger;
             _httpClient = httpClient;
         }
-
-        public async Task<WeatherApiCurrentWeatherResponse> GetWeatherAsync(string apiKey, string location) {
+        
+        public Task<WeatherApiCurrentWeatherResponse> GetWeatherAsync(string apiKey, string location) {
             _logger.LogDebug("GetWeatherAsync: ApiKey: {ApiKey} Location: {Location}", apiKey, location);
 
             var url = $"{Constants.WEATHERAPI_CURRENTWEATHER_BASEURL}?key={apiKey}&q={Uri.EscapeDataString(location)}";
             _logger.LogDebug("Constructed WeatherAPI Current Weather API URL: {Url}", url);
 
+            return GetWeatherInternal(url);
+        }
+
+        public Task<WeatherApiCurrentWeatherResponse> GetWeatherAsync(string apiKey, double lat, double lon) {
+            _logger.LogDebug("GetWeatherAsync: ApiKey: {ApiKey}, Latitude: {@lat}, Longitute: {@lon}", apiKey, lat, lon);
+
+            var url = $"{Constants.WEATHERAPI_CURRENTWEATHER_BASEURL}?key={apiKey}&q={lat},{lon}";
+            _logger.LogDebug("Constructed WeatherAPI Current Weather API URL: {Url}", url);
+
+            return GetWeatherInternal(url);
+        }
+
+        public Task<WeatherApiForecastResponse> GetForecastDailyAsync(string apiKey, string location, int days) {
+            _logger.LogDebug("GetForecastDailyAsync: ApiKey: {ApiKey} Location: {Location}, Days: {Days}", apiKey, location, days);
+
+            var url = $"{Constants.WEATHERAPI_FORECASTWEATHER_BASEURL}?key={apiKey}&q={Uri.EscapeDataString(location)}&days={days}";
+            _logger.LogDebug("Constructed WeatherAPI Daily Forecast API URL: {Url}", url);
+
+            return GetForecastInternal(url);
+        }
+
+        public Task<WeatherApiForecastResponse> GetForecastDailyAsync(string apiKey, double lat, double lon, int days) {
+            _logger.LogDebug("GetForecastDailyAsync: ApiKey: {ApiKey}, Latitude: {@lat}, Longitute: {@lon}, Days: {Days}", apiKey, lat, lon, days);
+
+            var url = $"{Constants.WEATHERAPI_FORECASTWEATHER_BASEURL}?key={apiKey}&q={lat},{lon}&days={days}";
+            _logger.LogDebug("Constructed WeatherAPI Daily Forecast API URL: {Url}", url);
+
+            return GetForecastInternal(url);
+        }
+
+        private async Task<WeatherApiCurrentWeatherResponse> GetWeatherInternal(string url) {
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
@@ -37,12 +68,7 @@ namespace Blazor.QuickWeather.WeatherApi
             return weatherResponse;
         }
 
-        public async Task<WeatherApiForecastResponse> GetForecastDailyAsync(string apiKey, string location, int days) {
-            _logger.LogDebug("GetForecastDailyAsync: ApiKey: {ApiKey} Location: {Location}, Days: {Days}", apiKey, location, days);
-
-            var url = $"{Constants.WEATHERAPI_FORECASTWEATHER_BASEURL}?key={apiKey}&q={Uri.EscapeDataString(location)}&days={days}";
-            _logger.LogDebug("Constructed WeatherAPI Daily Forecast API URL: {Url}", url);
-
+        private async Task<WeatherApiForecastResponse> GetForecastInternal(string url) {
             var response = await _httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
 

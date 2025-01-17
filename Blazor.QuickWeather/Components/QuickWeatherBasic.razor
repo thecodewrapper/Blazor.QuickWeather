@@ -7,17 +7,24 @@
     </button>
 
     <!-- Header Section -->
-    <div class="row weather-header">
-        <div class="col-4 current-weather-icon">
-            <img src="@GetWeatherIconUrl(WeatherData?.Icon, WeatherData?.Code ?? 0, WeatherData?.IsDay ?? true)" alt="@WeatherData?.Description" class="img-fluid" />
+    @if (WeatherData != null)
+    {
+        <div class="row weather-header">
+            <div class="col-6 current-weather-details">
+                <h2 class="current-temp">@Math.Round(WeatherData.Temperature)°</h2>
+                <p class="current-condition">@WeatherData.Description</p>
+                <p class="feels-like">Feels like @Math.Round(WeatherData.FeelsLike)°</p>
+                <p class="location">@WeatherData.Location</p>
+            </div>
+            <div class="col-6 current-weather-icon">
+                <img src="@GetWeatherIconUrl(WeatherData.Icon, WeatherData.Code, WeatherData.IsDay)" alt="@WeatherData.Description" class="img-fluid" />
+            </div>
         </div>
-        <div class="col-8 current-weather-details">
-            <h2 class="current-temp">@Math.Round(WeatherData?.Temperature ?? 0)°</h2>
-            <p class="current-condition">@(WeatherData?.Description ?? "Loading...")</p>
-            <p class="feels-like">Feels like @Math.Round(WeatherData?.FeelsLike ?? 0)°</p>
-            <p class="location">@WeatherData?.Location</p>
-        </div>
-    </div>
+    }
+    else
+    {
+        <p>Loading weather data...</p>
+    }
 
     @if (ForecastData != null)
     {
@@ -30,6 +37,7 @@
             {
                 <div class="col forecast-item">
                     <div class="forecast-day">@day.Date.ToString("ddd")</div>
+                    <div class="forecast-date">@day.Date.ToString("dd MMM")</div>
                     <img src="@GetWeatherIconUrl(day.Icon, day.Code, day.IsDay)" alt="@day.Description" class="forecast-icon" width="40" height="40" />
                     <div class="forecast-temp">@Math.Round(day.MaxTemperature)° / @Math.Round(day.MinTemperature)°</div>
                     <div class="precipitation">

@@ -17,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\" />
+    <ProjectReference Include="..\Blazor.QuickWeather.OpenWeatherMap\Blazor.QuickWeather.OpenWeatherMap.csproj" />
+    <ProjectReference Include="..\Blazor.QuickWeather.WeatherApi\Blazor.QuickWeather.WeatherApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Blazor.QuickWeather.OpenWeatherMap\Blazor.QuickWeather.OpenWeatherMap.csproj" />
-    <ProjectReference Include="..\Blazor.QuickWeather.WeatherApi\Blazor.QuickWeather.WeatherApi.csproj" />
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 </Project>

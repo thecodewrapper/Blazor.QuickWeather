@@ -3,13 +3,14 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <QuickWeatherWidget UpdateIntervalSeconds="180" Lon="33.4299" Lat="35.1264" Source="WeatherDataSource.OpenWeatherMap" Forecast="false" />
-        </div>
-        <div class="col-md-6">
-            <QuickWeatherWidget UpdateIntervalSeconds="180" Lon="33.4299" Lat="35.1264" Location="Halifax" Source="WeatherDataSource.WeatherApi" Forecast="true"  />
-        </div>
+<div class="row">
+    <div class="col-md-4">
+        <QuickWeatherBasic UpdateIntervalSeconds="180" Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+    </div>
+    <div class="col-md-4">
+        <QuickWeatherBasic UpdateIntervalSeconds="180" Source="WeatherDataSource.OpenWeatherMap" IncludeForecast="false" UseSourceIcons="false" />
+    </div>
+    <div class="col-md-4">
+        <QuickWeatherSmall UpdateIntervalSeconds="180" Source="WeatherDataSource.WeatherApi" IncludeForecast="true" />
     </div>
 </div>
