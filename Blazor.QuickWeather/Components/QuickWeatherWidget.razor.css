@@ -113,3 +113,10 @@ hr {
         outline: none;
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
     }
+
+/* Footer */
+.weather-footer {
+    font-size: 12px; /* Smaller text for footer */
+    text-color: #999; /* Light gray color */
+    text-align: right;
+}
