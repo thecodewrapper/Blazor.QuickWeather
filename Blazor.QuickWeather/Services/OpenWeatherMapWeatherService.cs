@@ -69,6 +69,8 @@ public class OpenWeatherMapWeatherService : IWeatherService
                     Description = day.Weather.FirstOrDefault()?.Description ?? "No description",
                     Icon = day.Weather.FirstOrDefault()?.Icon ?? string.Empty,
                     Code = day.Weather.FirstOrDefault()?.Id ?? 0,
+                    PrecipitationProbability = (int)day.PrecipitationProbability,
+                    WindSpeed = (int)(day.WindSpeed * 1.609), //to kph
                     IsDay = true
                 }).ToList()
             };
