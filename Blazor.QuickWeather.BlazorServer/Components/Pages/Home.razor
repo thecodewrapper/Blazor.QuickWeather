@@ -3,14 +3,42 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="row">
-    <div class="col-md-4">
-        <QuickWeatherBasic Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
-    </div>
-    <div class="col-md-4">
-        <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap" IncludeForecast="true" UseSourceIcons="false" />
-    </div>
-    <div class="col-md-4">
-        <QuickWeatherSmall Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+<div class="container mt-4">
+    <h1 class="text-center mb-5">Weather Dashboard</h1>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center bg-primary text-white">
+                    Basic - Weather API
+                </div>
+                <div class="card-body">
+                    <QuickWeatherBasic Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center bg-success text-white">
+                    Basic - OpenWeatherMap
+                </div>
+                <div class="card-body">
+                    <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap" IncludeForecast="true" UseSourceIcons="false" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header text-center bg-secondary text-white">
+                    Small - Weather API
+                </div>
+                <div class="card-body">
+                    <QuickWeatherSmall Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@code {
+    private int WidgetWidth { get; set; } = 300; // Default width
+}

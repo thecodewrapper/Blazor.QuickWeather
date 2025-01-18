@@ -1,23 +1,40 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://thecodewrapper.com" target="_blank">About</a>
+<div class="page d-flex flex-column min-vh-100">
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">Blazor.QuickWeather</a>
+            <a href="https://thecodewrapper.com" target="_blank" class="text-white text-decoration-none">
+                About
+            </a>
         </div>
+    </header>
 
-        <article class="content px-4">
+    <!-- Main Content -->
+    <main class="flex-grow-1">
+        <article class="content container py-4">
             @Body
         </article>
     </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div>
+            &copy; @DateTime.Now.Year thecodewrapper. All rights reserved.
+            <a href="https://thecodewrapper.com" target="_blank" class="text-white ms-2">
+                About Us
+            </a>
+        </div>
+    </footer>
 </div>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+<div id="blazor-error-ui" class="alert alert-danger position-fixed bottom-0 start-50 translate-middle-x w-75 shadow">
+    <div class="d-flex justify-content-between align-items-center">
+        <span>An unhandled error has occurred.</span>
+        <div>
+            <a href="" class="btn btn-sm btn-light">Reload</a>
+            <button class="btn btn-sm btn-light dismiss">🗙</button>
+        </div>
+    </div>
 </div>
