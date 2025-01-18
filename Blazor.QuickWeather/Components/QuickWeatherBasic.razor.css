@@ -8,6 +8,7 @@
     max-width: 500px;
     margin: 0 auto;
     position: relative;
+    margin-bottom: 10px;
 }
 
 .current-weather-icon img {

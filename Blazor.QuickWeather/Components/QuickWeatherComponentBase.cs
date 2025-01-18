@@ -21,9 +21,9 @@ namespace Blazor.QuickWeather.Components
         [Parameter] public WeatherDataSource? Source { get; set; }
 
         /// <summary>
-        /// The update interval in seconds. Defaults to 180
+        /// The update interval in seconds. Defaults to 0 (no auto update)
         /// </summary>
-        [Parameter] public int UpdateIntervalSeconds { get; set; } = 180;
+        [Parameter] public int UpdateIntervalSeconds { get; set; }
 
         /// <summary>
         /// Whether to include 7-day forecast data
@@ -101,7 +101,7 @@ namespace Blazor.QuickWeather.Components
 
         private void StartTimer() {
             if (UpdateIntervalSeconds < 1) {
-                throw new ArgumentException("UpdateIntervalSeconds must be greater than or equal to 1 second.");
+                return; //dont auto update
             }
 
             var updateIntervalMilliseconds = UpdateIntervalSeconds * 1000;

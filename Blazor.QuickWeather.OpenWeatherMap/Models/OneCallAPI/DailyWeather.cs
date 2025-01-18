@@ -2,7 +2,7 @@
 
 namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
 {
-    public class CurrentWeather
+    public class DailyWeather
     {
         [JsonPropertyName("dt")]
         public long DateTime { get; set; }
@@ -13,11 +13,23 @@ namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
         [JsonPropertyName("sunset")]
         public long Sunset { get; set; }
 
+        [JsonPropertyName("moonrise")]
+        public long Moonrise { get; set; }
+
+        [JsonPropertyName("moonset")]
+        public long Moonset { get; set; }
+
+        [JsonPropertyName("moon_phase")]
+        public double MoonPhase { get; set; }
+
+        [JsonPropertyName("summary")]
+        public string Summary { get; set; }
+
         [JsonPropertyName("temp")]
-        public double Temperature { get; set; }
+        public Temp Temp { get; set; }
 
         [JsonPropertyName("feels_like")]
-        public double FeelsLike { get; set; }
+        public Temp FeelsLike { get; set; }
 
         [JsonPropertyName("pressure")]
         public int Pressure { get; set; }
@@ -27,15 +39,6 @@ namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
 
         [JsonPropertyName("dew_point")]
         public double DewPoint { get; set; }
-
-        [JsonPropertyName("uvi")]
-        public double UVIndex { get; set; }
-
-        [JsonPropertyName("clouds")]
-        public int Clouds { get; set; }
-
-        [JsonPropertyName("visibility")]
-        public int Visibility { get; set; }
 
         [JsonPropertyName("wind_speed")]
         public double WindSpeed { get; set; }
@@ -48,5 +51,17 @@ namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
 
         [JsonPropertyName("weather")]
         public List<WeatherCondition> Weather { get; set; }
+
+        [JsonPropertyName("clouds")]
+        public int Clouds { get; set; }
+
+        [JsonPropertyName("pop")]
+        public double PrecipitationProbability { get; set; }
+
+        [JsonPropertyName("rain")]
+        public double? Rain { get; set; }
+
+        [JsonPropertyName("uvi")]
+        public double UVIndex { get; set; }
     }
 }

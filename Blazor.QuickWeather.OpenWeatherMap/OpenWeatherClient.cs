@@ -74,7 +74,7 @@ namespace Blazor.QuickWeather.OpenWeatherMap
 
             ValidateApiKey(apiKey);
 
-            var forecastWeatherUrl = $"{Constants.OPENWEATHER_ONECALL_BASEURL}?lat={lat}&lon={lon}&appid={apiKey}";
+            var forecastWeatherUrl = $"{Constants.OPENWEATHER_ONECALL_BASEURL}?lat={lat}&lon={lon}&appid={apiKey}&units=metric";
             _logger.LogDebug("Calling OpenWeatherMap Daily OneCall API: {Url}", forecastWeatherUrl);
 
             var response = await _httpClient.GetAsync(forecastWeatherUrl);

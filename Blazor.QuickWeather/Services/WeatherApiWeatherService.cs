@@ -2,7 +2,6 @@
 using Blazor.QuickWeather.WeatherApi;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.Globalization;
 
 namespace Blazor.QuickWeather.Services
 {
@@ -10,11 +9,11 @@ namespace Blazor.QuickWeather.Services
     {
         private readonly ILogger<WeatherApiWeatherService> _logger;
         private readonly WeatherApiClient _client;
-        private readonly IOptions<WeatherServiceOptions> _options;
+        private readonly IOptions<WeatherApiOptions> _options;
 
         public WeatherDataSource Resource => WeatherDataSource.WeatherApi;
 
-        public WeatherApiWeatherService(ILogger<WeatherApiWeatherService> logger, WeatherApiClient client, IOptions<WeatherServiceOptions> options) {
+        public WeatherApiWeatherService(ILogger<WeatherApiWeatherService> logger, WeatherApiClient client, IOptions<WeatherApiOptions> options) {
             _logger = logger;
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -25,7 +24,7 @@ namespace Blazor.QuickWeather.Services
                 if (!IsRequestValid(request))
                     return null;
 
-                var apiKey = _options.Value.WeatherApi.ApiKey;
+                var apiKey = _options.Value.ApiKey;
 
                 var weatherApiResponse = await _client.GetWeatherAsync(apiKey, request.Latitude, request.Longitude);
 
@@ -54,7 +53,7 @@ namespace Blazor.QuickWeather.Services
                 if (!IsRequestValid(request))
                     return null;
 
-                var apiKey = _options.Value.WeatherApi.ApiKey;
+                var apiKey = _options.Value.ApiKey;
 
                 //7-day forecast fixed. You can add the number of days as a property in the WeatherRequest model to pass it on. Reason is not there now, is because not all weather APIs support defining the number of days in the request.
                 var forecastApiResponse = await _client.GetForecastDailyAsync(apiKey, request.Latitude, request.Longitude, 7);

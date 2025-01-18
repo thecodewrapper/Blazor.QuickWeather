@@ -2,16 +2,10 @@
 
 namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
 {
-    public class CurrentWeather
+    public class HourlyWeather
     {
         [JsonPropertyName("dt")]
         public long DateTime { get; set; }
-
-        [JsonPropertyName("sunrise")]
-        public long Sunrise { get; set; }
-
-        [JsonPropertyName("sunset")]
-        public long Sunset { get; set; }
 
         [JsonPropertyName("temp")]
         public double Temperature { get; set; }
@@ -48,5 +42,8 @@ namespace Blazor.QuickWeather.OpenWeatherMap.OneCallAPI
 
         [JsonPropertyName("weather")]
         public List<WeatherCondition> Weather { get; set; }
+
+        [JsonPropertyName("pop")]
+        public double PrecipitationProbability { get; set; }
     }
 }

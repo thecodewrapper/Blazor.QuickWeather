@@ -22,15 +22,15 @@ namespace Blazor.QuickWeather.Extensions
             return services;
         }
 
-        public static IServiceCollection AddOpenWeatherMap(this IServiceCollection services, string apiKey) {
-            if (string.IsNullOrWhiteSpace(apiKey)) {
-                throw new ArgumentNullException(nameof(apiKey), "API key for OpenWeatherMap cannot be null or empty.");
+        public static IServiceCollection AddOpenWeatherMap(this IServiceCollection services, Action<OpenWeatherMapOptions> configure) {
+            if (configure == null) {
+                throw new ArgumentNullException(nameof(configure));
             }
 
-            services.Configure<WeatherServiceOptions>(options =>
-            {
-                options.OpenWeatherMap.ApiKey = apiKey;
-            });
+            var options = new OpenWeatherMapOptions();
+            configure(options);
+
+            services.Configure(configure);
 
             services.AddScoped<OpenWeatherClient>();
             services.AddHttpClient<OpenWeatherClient>();
@@ -39,34 +39,19 @@ namespace Blazor.QuickWeather.Extensions
             return services;
         }
 
-        public static IServiceCollection AddWeatherApi(this IServiceCollection services, string apiKey) {
-            if (string.IsNullOrWhiteSpace(apiKey)) {
-                throw new ArgumentNullException(nameof(apiKey), "API key for WeatherApi cannot be null or empty.");
+        public static IServiceCollection AddWeatherApi(this IServiceCollection services, Action<WeatherApiOptions> configure) {
+            if (configure == null) {
+                throw new ArgumentNullException(nameof(configure));
             }
 
-            services.Configure<WeatherServiceOptions>(options =>
-            {
-                options.WeatherApi.ApiKey = apiKey;
-            });
+            var options = new WeatherApiOptions();
+            configure(options);
+
+            services.Configure(configure);
 
             services.AddScoped<WeatherApiClient>();
             services.AddHttpClient<WeatherApiClient>();
             services.AddScoped<IWeatherService, WeatherApiWeatherService>();
-
-            return services;
-        }
-
-        public static IServiceCollection AddOpenMeteo(this IServiceCollection services, string apiKey) {
-            if (string.IsNullOrWhiteSpace(apiKey)) {
-                throw new ArgumentNullException(nameof(apiKey), "API key for OpenMeteo cannot be null or empty.");
-            }
-
-            services.Configure<WeatherServiceOptions>(options =>
-            {
-                options.OpenMeteo.ApiKey = apiKey;
-            });
-
-            //add open-meteo http client and services here
 
             return services;
         }

@@ -10,11 +10,11 @@ public class OpenWeatherMapWeatherService : IWeatherService
 {
     private readonly ILogger<OpenWeatherMapWeatherService> _logger;
     private readonly OpenWeatherClient _client;
-    private readonly IOptions<WeatherServiceOptions> _options;
+    private readonly IOptions<OpenWeatherMapOptions> _options;
 
     public WeatherDataSource Resource => WeatherDataSource.OpenWeatherMap;
 
-    public OpenWeatherMapWeatherService(ILogger<OpenWeatherMapWeatherService> logger, OpenWeatherClient client, IOptions<WeatherServiceOptions> options) {
+    public OpenWeatherMapWeatherService(ILogger<OpenWeatherMapWeatherService> logger, OpenWeatherClient client, IOptions<OpenWeatherMapOptions> options) {
         _logger = logger;
         _client = client ?? throw new ArgumentNullException(nameof(client));
         _options = options ?? throw new ArgumentNullException(nameof(options));
@@ -25,10 +25,8 @@ public class OpenWeatherMapWeatherService : IWeatherService
             if (!IsRequestValid(request))
                 return null;
 
-            // Retrieve the API key from the options
-            var apiKey = _options.Value.OpenWeatherMap.ApiKey;
+            var apiKey = _options.Value.CurrentWeatherApiKey;
 
-            // Call the OpenWeatherMap client for current weather
             var response = await _client.GetWeatherAsync(apiKey, request.Latitude, request.Longitude);
 
             return new CurrentWeatherData
@@ -56,18 +54,16 @@ public class OpenWeatherMapWeatherService : IWeatherService
             if (!IsRequestValid(request))
                 return null;
 
-            // Retrieve the API key from the options
-            var apiKey = _options.Value.OpenWeatherMap.ApiKey;
+            var apiKey = _options.Value.OneCallApiKey;
 
-            // Call the OpenWeatherMap client for daily forecast
             var response = await _client.GetOneCallAsync(apiKey, request.Latitude, request.Longitude);
 
             return new ForecastWeatherData
             {
-                Location = $"Lat: {response.Lat}, Lon: {response.Lon}",
+                Location = $"Lat: {response.Latitude}, Lon: {response.Longitude}",
                 Forecast = response.Daily.Select(day => new ForecastDay
                 {
-                    Date = DateTimeOffset.FromUnixTimeSeconds(day.Dt).DateTime,
+                    Date = DateTimeOffset.FromUnixTimeSeconds(day.DateTime).DateTime,
                     MaxTemperature = (float)day.Temp.Max,
                     MinTemperature = (float)day.Temp.Min,
                     Description = day.Weather.FirstOrDefault()?.Description ?? "No description",
@@ -84,12 +80,10 @@ public class OpenWeatherMapWeatherService : IWeatherService
     }
 
     private static bool IsDayTime(OpenWeatherCurrentWeatherResponse weatherResponse) {
-        // Extract sunrise, sunset, and current time (dt) from the JSON
         long sunrise = weatherResponse.Sys.Sunrise;
         long sunset = weatherResponse.Sys.Sunset;
         long currentTime = weatherResponse.Dt;
 
-        // Determine if the current time is between sunrise and sunset
         return currentTime >= sunrise && currentTime < sunset;
     }
 
