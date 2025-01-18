@@ -1,135 +1,137 @@
 ﻿@page "/"
 @using Blazor.QuickWeather.Components
 
-<PageTitle>Blazor.QuickWeather - Build Weather-Enabled Blazor Apps</PageTitle>
+<PageTitle>Blazor.QuickWeather - Your Weather Widget Solution</PageTitle>
 
-<div class="container mt-4">
+<div class="container-fluid px-5">
     <!-- Hero Section -->
-    <div class="text-center mb-5">
-        <h1 class="display-4">Blazor.QuickWeather</h1>
-        <p class="lead">The ultimate weather widget solution for Blazor Server applications. Build fast, customizable, and feature-rich weather dashboards in minutes.</p>
-        <a href="#demo" class="btn btn-primary btn-lg me-2">Live Demo</a>
-        <a href="#features" class="btn btn-outline-secondary btn-lg">Learn More</a>
-    </div>
-
-    <!-- Demo Section -->
-    <div id="demo" class="mb-5">
-        <h2 class="text-center mb-4">Interactive Demo</h2>
-        <p class="text-center">Customize the weather widgets below and see them in action!</p>
-
-        <!-- Controls to Modify Parameters -->
-        <div class="card mb-4">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">Customize Widgets</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Include Forecast:</label>
-                        <input type="checkbox" class="form-check-input ms-2" @bind="IncludeForecast" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Use Source Icons:</label>
-                        <input type="checkbox" class="form-check-input ms-2" @bind="UseSourceIcons" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Update Interval (seconds):</label>
-                        <input type="number" class="form-control" @bind="UpdateIntervalSeconds" min="0" />
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Adjust Widget Width:</label>
-                        <input type="range" class="form-range" min="300" max="550" step="10" @bind="WidgetWidth" />
-                        <span class="ms-2">Width: @WidgetWidth px</span>
-                    </div>
-                </div>
-            </div>
+    <section class="text-center py-5" style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white;">
+        <h1 class="display-4 fw-bold">Blazor.QuickWeather</h1>
+        <p class="lead mt-3">Empower your Blazor apps with customizable weather widgets and robust API libraries.</p>
+        <div class="mt-4">
+            <a href="#demo" class="btn btn-light btn-lg me-3">Try the Demo</a>
+            <a href="/purchase" class="btn btn-outline-light btn-lg">Purchase Now</a>
         </div>
-
-        <!-- Weather Widgets -->
-        <div class="row">
-            <!-- Weather API - Basic Widget -->
-            <div class="col-md-6 mb-4 d-flex justify-content-center">
-                <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
-                    <div class="card-header text-center bg-primary text-white">
-                        Weather API - Basic
-                    </div>
-                    <div class="card-body">
-                        <QuickWeatherBasic Source="WeatherDataSource.WeatherApi"
-                                           IncludeForecast="IncludeForecast"
-                                           UseSourceIcons="UseSourceIcons"
-                                           UpdateIntervalSeconds="UpdateIntervalSeconds" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- OpenWeatherMap - Basic Widget -->
-            <div class="col-md-6 mb-4 d-flex justify-content-center">
-                <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
-                    <div class="card-header text-center bg-success text-white">
-                        OpenWeatherMap - Basic
-                    </div>
-                    <div class="card-body">
-                        <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap"
-                                           IncludeForecast="IncludeForecast"
-                                           UseSourceIcons="UseSourceIcons"
-                                           UpdateIntervalSeconds="UpdateIntervalSeconds" />
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Small Weather Widget -->
-        <div class="row">
-            <div class="col-12 d-flex justify-content-center">
-                <div class="card shadow-sm">
-                    <div class="card-header text-center bg-secondary text-white">
-                        Weather API - Small
-                    </div>
-                    <div class="card-body">
-                        <QuickWeatherSmall Source="WeatherDataSource.WeatherApi"
-                                           IncludeForecast="IncludeForecast"
-                                           UseSourceIcons="UseSourceIcons"
-                                           UpdateIntervalSeconds="UpdateIntervalSeconds" />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </section>
 
     <!-- Features Section -->
-    <div id="features" class="mb-5">
-        <h2 class="text-center mb-4">Features</h2>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Blazor Weather Widgets</h5>
-                        <p class="card-text">Fully customizable widgets for Blazor Server apps with options to toggle forecast, adjust icons, and configure update intervals.</p>
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-5">Why Choose Blazor.QuickWeather?</h2>
+            <div class="row g-5">
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-cloud-sun-fill text-primary display-3 mb-3"></i>
+                    <h5 class="fw-bold">Customizable Widgets</h5>
+                    <p>Easily toggle forecast views, use custom or source icons, adjust refresh intervals, and control widget dimensions.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-server text-success display-3 mb-3"></i>
+                    <h5 class="fw-bold">Standalone API Libraries</h5>
+                    <p class="card-text">Ready-to-use libraries for <strong><a target="_blank" href="https://openweathermap.org/">OpenWeatherMap</a></strong> and <strong><a target="_blank" href="https://www.weatherapi.com/">WeatherAPI</a></strong>, featuring API object models and HTTP clients.</p>
+                    <ul class="list-unstyled">
+                        <li>- OpenWeatherMap OneCall API 3.0 support</li>
+                        <li>- Current weather and forecast retrieval</li>
+                        <li>- Easy integration into non-Blazor projects</li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="bi bi-gear-wide-connected text-secondary display-3 mb-3"></i>
+                    <h5 class="fw-bold">Blazor Ready</h5>
+                    <p>Integrates seamlessly into Blazor Server projects, with full support for .NET 8 and modern web development practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold text-center mb-4">Live Demo</h2>
+            <p class="text-center mb-5">Interact with the widgets below to see their customization features in action.</p>
+
+            <!-- Customization Controls -->
+            <div class="card mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Widget Customization</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Include Forecast:</label>
+                            <input type="checkbox" class="form-check-input ms-2" @bind="IncludeForecast" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Use Source Icons:</label>
+                            <input type="checkbox" class="form-check-input ms-2" @bind="UseSourceIcons" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Update Interval (seconds):</label>
+                            <input type="number" class="form-control" @bind="UpdateIntervalSeconds" min="0" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Adjust Widget Width:</label>
+                            <input type="range" class="form-range" min="300" max="600" step="10" @bind="WidgetWidth" />
+                            <span class="ms-2">Width: @WidgetWidth px</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">Standalone Libraries Included</h5>
-                        <p class="card-text">Ready-to-use libraries for <strong><a target="_blank" href="https://openweathermap.org/">OpenWeatherMap</a></strong> and <strong><a target="_blank" href="https://www.weatherapi.com/">WeatherAPI</a></strong>, featuring API object models and HTTP clients.</p>
-                        <ul class="list-unstyled">
-                            <li>- OpenWeatherMap OneCall API 3.0 support</li>
-                            <li>- Current weather and forecast retrieval</li>
-                            <li>- Easy integration into non-Blazor projects</li>
-                        </ul>
+
+            <!-- Weather Widgets -->
+            <div class="row g-4">
+                <div class="col-md-6 mb-4 d-flex justify-content-center">
+                    <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
+                        <div class="card-header bg-primary text-white">
+                            Weather API - Basic
+                        </div>
+                        <div class="card-body">
+                            <QuickWeatherBasic Source="WeatherDataSource.WeatherApi"
+                                               IncludeForecast="IncludeForecast"
+                                               UseSourceIcons="UseSourceIcons"
+                                               UpdateIntervalSeconds="UpdateIntervalSeconds" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 d-flex justify-content-center">
+                    <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
+                        <div class="card-header bg-success text-white">
+                            OpenWeatherMap - Basic
+                        </div>
+                        <div class="card-body">
+                            <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap"
+                                               IncludeForecast="IncludeForecast"
+                                               UseSourceIcons="UseSourceIcons"
+                                               UpdateIntervalSeconds="UpdateIntervalSeconds" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Small Widget -->
+            <div class="row mt-5">
+                <div class="col-12 d-flex justify-content-center">
+                    <div class="card shadow-sm" style="max-width: 400px;">
+                        <div class="card-header bg-secondary text-white">
+                            Weather API - Small
+                        </div>
+                        <div class="card-body">
+                            <QuickWeatherSmall Source="WeatherDataSource.WeatherApi"
+                                               IncludeForecast="IncludeForecast"
+                                               UseSourceIcons="UseSourceIcons"
+                                               UpdateIntervalSeconds="UpdateIntervalSeconds" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Call to Action -->
-    <div class="text-center mb-5">
-        <h2>Ready to Get Started?</h2>
-        <p class="lead">Own the source code and bring weather insights to your Blazor apps today. Includes everything you need to start building.</p>
-        <a href="/purchase" class="btn btn-success btn-lg">Purchase Now</a>
-    </div>
+    <section class="text-center py-5" style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white;">
+        <h2 class="fw-bold">Ready to Get Started?</h2>
+        <p class="lead">Own the complete source code and bring weather functionality to your apps today.</p>
+        <a href="/purchase" class="btn btn-light btn-lg">Buy Now</a>
+    </section>
 </div>
 
 @code {
