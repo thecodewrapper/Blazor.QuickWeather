@@ -58,3 +58,11 @@ h1:focus {
     padding: 1rem;
     border-radius: 8px;
 }
+
+.card {
+    transition: width 0.3s ease; /* Smooth resizing transition */
+}
+
+.card-body{
+    margin:0 auto;
+}

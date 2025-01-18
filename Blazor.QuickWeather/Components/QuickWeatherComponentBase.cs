@@ -41,6 +41,7 @@ namespace Blazor.QuickWeather.Components
         protected Timer? UpdateTimer;
         protected DateTime LastUpdated;
         protected Geolocation _userLocation;
+        protected bool _isInitialized = false; // Tracks whether the component is initialized
 
         protected override async Task OnInitializedAsync() {
         }
@@ -53,6 +54,26 @@ namespace Blazor.QuickWeather.Components
                     StateHasChanged();
                     StartTimer();
                 }
+                _isInitialized = true; // Mark initialization as complete
+            }
+        }
+
+        protected override async Task OnParametersSetAsync() {
+            if (!_isInitialized) {
+                // Avoid running logic before initialization
+                return;
+            }
+
+            // Reload weather data when parameters change
+            await LoadWeatherData();
+
+            // Restart the timer if the update interval has changed
+            if (UpdateIntervalSeconds > 0) {
+                StartTimer();
+            }
+            else {
+                UpdateTimer?.Dispose(); // Stop the timer if interval is 0
+                UpdateTimer = null;
             }
         }
 
@@ -60,8 +81,8 @@ namespace Blazor.QuickWeather.Components
             var request = new WeatherRequest
             {
                 CityName = Location,
-                Longitude = Lon ?? _userLocation.Longitude,
-                Latitude = Lat ?? _userLocation.Latitude,
+                Longitude = Lon ?? _userLocation?.Longitude ?? 0,
+                Latitude = Lat ?? _userLocation?.Latitude ?? 0,
                 IpAddress = string.Empty
             };
 
@@ -78,6 +99,9 @@ namespace Blazor.QuickWeather.Components
 
                 if (IncludeForecast) {
                     ForecastData = (await weatherService.GetForecastWeatherAsync(request))?.Forecast;
+                }
+                else {
+                    ForecastData = null;
                 }
             }
             else {

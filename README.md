@@ -7,7 +7,7 @@ Blazor.QuickWeather is a Blazor-based weather application that provides current 
 - Display current weather information
 - Display 7-day weather forecast
 - Support for multiple weather APIs (OpenWeatherMap, WeatherApi)
-- Blazor Server and Blazor WebAssembly support
+- Blazor Server support
 - Configurable via `appsettings.json` and user secrets
 
 ## Projects
@@ -48,29 +48,21 @@ cd Blazor.QuickWeather
 
 ```
 dotnet user-secrets init --project Blazor.QuickWeather.BlazorServer
-dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:ApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
+dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:CurrentApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
+dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:OneCallApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
 dotnet user-secrets set "WeatherApiResources:WeatherApi:ApiKey" "your_weatherapi_api_key" --project Blazor.QuickWeather.BlazorServer
 ```
 
 3. Update `appsettings.json` if needed:
 
 ```
-{
   "WeatherApiResources": {
-    "OpenWeatherMap": {
-      "ApiKey": "your_openweathermap_api_key"
-    },
-    "WeatherApi": {
-      "ApiKey": "your_weatherapi_api_key"
-    }
+  "OpenWeatherMap": {
+    "CurrentApiKey": "",
+    "OneCallApiKey": ""
   },
-  "Serilog": {
-    "MinimumLevel": "Debug",
-    "WriteTo": [
-      {
-        "Name": "Console"
-      }
-    ]
+  "WeatherApi": {
+    "ApiKey": ""
   }
 }
 ```

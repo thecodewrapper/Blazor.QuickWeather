@@ -4,35 +4,77 @@
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-4">
-    <h1 class="text-center mb-5">Weather Dashboard</h1>
+    <h1 class="text-center mb-4">Weather Dashboard</h1>
+
+    <!-- Controls to Modify Parameters -->
+    <div class="card mb-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Customize Widgets</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label class="form-label">Include Forecast:</label>
+                    <input type="checkbox" class="form-check-input ms-2" @bind="IncludeForecast" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Use Source Icons:</label>
+                    <input type="checkbox" class="form-check-input ms-2" @bind="UseSourceIcons" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Update Interval (seconds):</label>
+                    <input type="number" class="form-control" @bind="UpdateIntervalSeconds" min="0" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Adjust Widget Width:</label>
+                    <input type="range" class="form-range" min="200" max="550" step="10" @bind="WidgetWidth" />
+                    <span class="ms-2">Width: @WidgetWidth px</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Widgets -->
     <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
+            <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
                 <div class="card-header text-center bg-primary text-white">
-                    Basic - Weather API
+                    Weather API - Basic
                 </div>
                 <div class="card-body">
-                    <QuickWeatherBasic Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+                    <QuickWeatherBasic Source="WeatherDataSource.WeatherApi"
+                                       IncludeForecast="IncludeForecast"
+                                       UseSourceIcons="UseSourceIcons"
+                                       UpdateIntervalSeconds="UpdateIntervalSeconds" />
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
+        <div class="col-md-6 mb-4 d-flex justify-content-center">
+            <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
                 <div class="card-header text-center bg-success text-white">
-                    Basic - OpenWeatherMap
+                    OpenWeatherMap - Basic
                 </div>
                 <div class="card-body">
-                    <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap" IncludeForecast="true" UseSourceIcons="false" />
+                    <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap"
+                                       IncludeForecast="IncludeForecast"
+                                       UseSourceIcons="UseSourceIcons"
+                                       UpdateIntervalSeconds="UpdateIntervalSeconds" />
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
+    </div>
+
+    <div class="row">
+        <div class="col-12 mb-4 d-flex justify-content-center">
+            <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
                 <div class="card-header text-center bg-secondary text-white">
-                    Small - Weather API
+                    Weather API - Small
                 </div>
                 <div class="card-body">
-                    <QuickWeatherSmall Source="WeatherDataSource.WeatherApi" IncludeForecast="true" UseSourceIcons="false" />
+                    <QuickWeatherSmall Source="WeatherDataSource.WeatherApi"
+                                       IncludeForecast="IncludeForecast"
+                                       UseSourceIcons="UseSourceIcons"
+                                       UpdateIntervalSeconds="UpdateIntervalSeconds" />
                 </div>
             </div>
         </div>
@@ -40,5 +82,8 @@
 </div>
 
 @code {
-    private int WidgetWidth { get; set; } = 300; // Default width
+    private bool IncludeForecast { get; set; } = false; // Default: no forecast
+    private bool UseSourceIcons { get; set; } = false; // Default: use source icons
+    private int UpdateIntervalSeconds { get; set; } = 0; // Default: no auto-update
+    private int WidgetWidth { get; set; } = 550; // Default widget width
 }
