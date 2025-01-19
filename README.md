@@ -9,6 +9,7 @@ Blazor.QuickWeather is a Blazor-based weather application that provides current 
 - Support for multiple weather APIs (OpenWeatherMap, WeatherApi)
 - Blazor Server support
 - Configurable via `appsettings.json` and user secrets
+- Easy integration and widget registration
 
 ## Projects
 
@@ -28,6 +29,8 @@ Library for interacting with the OpenWeatherMap API.
 
 Library for interacting with the WeatherApi API.
 
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -37,35 +40,30 @@ Library for interacting with the WeatherApi API.
 
 ### Configuration
 
-1. Clone the repository:
+1. **Set up user secrets for API keys:**
 
-```
-git clone https://github.com/your-repo/Blazor.QuickWeather.git
-cd Blazor.QuickWeather
-```
+   Run the following commands to configure your API keys:
 
-2. Set up user secrets for API keys:
+   ```bash
+   dotnet user-secrets init --project Blazor.QuickWeather.BlazorServer
+   dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:CurrentApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
+   dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:OneCallApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
+   dotnet user-secrets set "WeatherApiResources:WeatherApi:ApiKey" "your_weatherapi_api_key" --project Blazor.QuickWeather.BlazorServer
+   ```
 
-```
-dotnet user-secrets init --project Blazor.QuickWeather.BlazorServer
-dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:CurrentApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
-dotnet user-secrets set "WeatherApiResources:OpenWeatherMap:OneCallApiKey" "your_openweathermap_api_key" --project Blazor.QuickWeather.BlazorServer
-dotnet user-secrets set "WeatherApiResources:WeatherApi:ApiKey" "your_weatherapi_api_key" --project Blazor.QuickWeather.BlazorServer
-```
+2. **Update `appsettings.json` if needed:**
 
-3. Update `appsettings.json` if needed:
-
-```
-  "WeatherApiResources": {
-  "OpenWeatherMap": {
-    "CurrentApiKey": "",
-    "OneCallApiKey": ""
-  },
-  "WeatherApi": {
-    "ApiKey": ""
-  }
-}
-```
+   ```json
+   "WeatherApiResources": {
+     "OpenWeatherMap": {
+       "CurrentApiKey": "",
+       "OneCallApiKey": ""
+     },
+     "WeatherApi": {
+       "ApiKey": ""
+     }
+   }
+   ```
 
 ### Running the Application
 
@@ -73,26 +71,109 @@ dotnet user-secrets set "WeatherApiResources:WeatherApi:ApiKey" "your_weatherapi
 2. Set `Blazor.QuickWeather.BlazorServer` as the startup project.
 3. Press `F5` to build and run the application.
 
+---
+
+## Registering Weather Sources
+
+Blazor.QuickWeather provides extension methods to simplify adding weather services to your application. You can register the weather services and APIs in the `Program.cs` file:
+
+```csharp
+using Blazor.QuickWeather.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure QuickWeather
+builder.Services.AddQuickWeather(options =>
+{
+    // Additional configuration if needed
+});
+
+// Register OpenWeatherMap API
+builder.Services.AddOpenWeatherMap(options =>
+{
+    options.CurrentWeatherApiKey = builder.Configuration["WeatherApiResources:OpenWeatherMap:CurrentApiKey"];
+    options.OneCallApiKey = builder.Configuration["WeatherApiResources:OpenWeatherMap:OneCallApiKey"];
+});
+
+// Register WeatherApi API
+builder.Services.AddWeatherApi(options =>
+{
+    options.ApiKey = builder.Configuration["WeatherApiResources:WeatherApi:ApiKey"];
+});
+
+var app = builder.Build();
+```
+
+### Widget Integration
+
+To add a QuickWeather widget, call the `AddQuickWeather` method in the service configuration and ensure a weather service is registered (e.g., OpenWeatherMap or WeatherApi).
+
+---
+
 ## Usage
 
-Navigate to the application in your browser. You will see the current weather and 7-day forecast for the configured location.
+After registering the services and weather sources, you can use the `<QuickWeatherBasic>` or `<QuickWeatherSmall>` component in your Blazor pages to display weather data. Here's how to use it:
+
+### Basic Example
+
+```razor
+@page "/"
+<PageTitle>QuickWeather</PageTitle>
+
+<QuickWeatherBasic Source="WeatherDataSource.WeatherApi"
+                   IncludeForecast="true"
+                   UseSourceIcons="true"
+                   UpdateIntervalSeconds="300" />
+```
+
+### Parameters
+
+| Parameter             | Type                | Description                                                                                  |
+|-----------------------|---------------------|----------------------------------------------------------------------------------------------|
+| `Source`              | `WeatherDataSource` | Specifies the weather source to use. Options are `WeatherApi` or `OpenWeatherMap`.           |
+| `IncludeForecast`     | `bool`              | Determines whether to include a 7-day weather forecast. Defaults to `false`.                 |
+| `UseSourceIcons`      | `bool`              | Indicates whether to use the weather icons provided by the selected weather API. Defaults to `false`. |
+| `UpdateIntervalSeconds` | `int`             | Specifies the interval (in seconds) for refreshing weather data. Set to `0` to disable auto-refresh. |
+
+### Example Breakdown
+
+- **`Source`**: Choose which weather API to use for fetching data (e.g., `WeatherDataSource.WeatherApi` or `WeatherDataSource.OpenWeatherMap`). Make sure the selected source has been registered in the service container.
+- **`IncludeForecast`**: Set to `true` if you want to display a 7-day weather forecast in addition to the current weather.
+- **`UseSourceIcons`**: If set to `true`, weather condition icons from the API (e.g., sun, cloud, rain icons) will be used. Otherwise, default icons will be displayed.
+- **`UpdateIntervalSeconds`**: Controls how often the widget fetches updated weather data. A value of `300` (5 minutes) is recommended for regular updates without overwhelming the API.
+
+### Customization Example
+
+```razor
+<QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap"
+                   IncludeForecast="false"
+                   UseSourceIcons="true"
+                   UpdateIntervalSeconds="600" />
+```
+
+- This example fetches weather data from **OpenWeatherMap**, excludes the forecast, uses the source's weather icons, and refreshes the data every 10 minutes.
+
+---
 
 ## Logging
 
 The application uses Serilog for logging. Logs are configured in `appsettings.json` and can be customized as needed.
 
-## Contributing
+Example configuration:
 
-Contributions are welcome! Please fork the repository and submit pull requests.
+```json
+"Serilog": {
+  "MinimumLevel": "Information",
+  "WriteTo": [
+    { "Name": "Console" }
+  ]
+}
+```
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+---
 
 ## Acknowledgements
 
 - [OpenWeatherMap](https://openweathermap.org/)
 - [WeatherApi](https://www.weatherapi.com/)
 - [Serilog](https://serilog.net/)
-
----
