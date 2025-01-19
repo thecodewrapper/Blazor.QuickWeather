@@ -4,9 +4,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - quickweather
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -21,17 +18,20 @@ jobs:
         with:
           dotnet-version: '8.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build Blazor project
+        run: dotnet build Blazor.QuickWeather.BlazorServer/Blazor.QuickWeather.BlazorServer.csproj --configuration Release
+
+      - name: Publish Blazor project
+        run: dotnet publish Blazor.QuickWeather.BlazorServer/Blazor.QuickWeather.BlazorServer.csproj -c Release -o ${{env.DOTNET_ROOT}}/quickweather_app
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/quickweather_app
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/quickweather_app
 
   deploy:
     runs-on: ubuntu-latest
