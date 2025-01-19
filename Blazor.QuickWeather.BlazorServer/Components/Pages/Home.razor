@@ -18,26 +18,38 @@
     <section id="features" class="py-5">
         <div class="container">
             <h2 class="fw-bold text-center mb-5">Why Choose Blazor.QuickWeather?</h2>
-            <div class="row g-5">
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-cloud-sun-fill text-primary display-3 mb-3"></i>
-                    <h5 class="fw-bold">Customizable Widgets</h5>
-                    <p>Easily toggle forecast views, use custom or source icons, adjust refresh intervals, and control widget dimensions.</p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-cloud-sun-fill text-primary display-3 mb-3"></i>
+                            <h5 class="fw-bold">Customizable Widgets</h5>
+                            <p>Easily toggle forecast views, use custom or source icons, adjust refresh intervals, and control widget dimensions.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-server text-success display-3 mb-3"></i>
-                    <h5 class="fw-bold">Standalone API Libraries</h5>
-                    <p class="card-text">Ready-to-use libraries for <strong><a target="_blank" href="https://openweathermap.org/">OpenWeatherMap</a></strong> and <strong><a target="_blank" href="https://www.weatherapi.com/">WeatherAPI</a></strong>, featuring API object models and HTTP clients.</p>
-                    <ul class="list-unstyled">
-                        <li>- OpenWeatherMap OneCall API 3.0 support</li>
-                        <li>- Current weather and forecast retrieval</li>
-                        <li>- Easy integration into non-Blazor projects</li>
-                    </ul>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-server text-success display-3 mb-3"></i>
+                            <h5 class="fw-bold">Standalone API Libraries</h5>
+                            <p class="card-text">Ready-to-use libraries for <strong><a target="_blank" href="https://openweathermap.org/">OpenWeatherMap</a></strong> and <strong><a target="_blank" href="https://www.weatherapi.com/">WeatherAPI</a></strong>, featuring API object models and HTTP clients.</p>
+                            <ul class="list-unstyled">
+                                <li>- OpenWeatherMap OneCall API 3.0 support</li>
+                                <li>- Current weather and forecast retrieval</li>
+                                <li>- Easy integration into non-Blazor projects</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <i class="bi bi-gear-wide-connected text-secondary display-3 mb-3"></i>
-                    <h5 class="fw-bold">Blazor Ready</h5>
-                    <p>Integrates seamlessly into Blazor Server projects, with full support for .NET 8 and modern web development practices.</p>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-gear-wide-connected text-secondary display-3 mb-3"></i>
+                            <h5 class="fw-bold">Blazor Ready</h5>
+                            <p>Integrates seamlessly into Blazor Server projects, with full support for .NET 8 and modern web development practices.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -65,8 +77,14 @@
                             <input type="checkbox" class="form-check-input ms-2" @bind="UseSourceIcons" />
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label">Update Interval (seconds):</label>
-                            <input type="number" class="form-control" @bind="UpdateIntervalSeconds" min="0" />
+                            <label class="form-label">Update Interval:</label>
+                            <select class="form-select" @bind="UpdateIntervalSeconds">
+                                <option value="0" selected>Auto-Update Disabled</option>
+                                <option value="60">1 Minute</option>
+                                <option value="120">2 Minutes</option>
+                                <option value="300">5 Minutes</option>
+                            </select>
+                            <small class="form-text text-muted">Choose how often the widget refreshes. Auto-Update Disabled will prevent automatic updates.</small>
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Adjust Widget Width:</label>
