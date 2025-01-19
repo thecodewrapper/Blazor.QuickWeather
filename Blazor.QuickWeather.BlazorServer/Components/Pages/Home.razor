@@ -3,34 +3,37 @@
 
 <PageTitle>Blazor.QuickWeather - Your Weather Widget Solution</PageTitle>
 
-<div class="container-fluid px-5">
-    <!-- Hero Section -->
-    <section class="text-center py-5" style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white;">
-        <h1 class="display-4 fw-bold">Blazor.QuickWeather</h1>
-        <p class="lead mt-3">Empower your Blazor apps with customizable weather widgets and robust API libraries.</p>
-        <div class="mt-4">
-            <a href="#demo" class="btn btn-light btn-lg me-3">Try the Demo</a>
-            <a href="/purchase" class="btn btn-outline-light btn-lg">Purchase Now</a>
+<div class="d-flex flex-column min-vh-100">
+    <!-- Header Section -->
+    <section class="text-center py-5"
+             style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white; width: 100%;">
+        <div class="container px-3">
+            <h1 class="display-4 fw-bold">Blazor.QuickWeather</h1>
+            <p class="lead mt-3">Empower your Blazor apps with customizable weather widgets and robust API libraries.</p>
+            <div class="mt-4">
+                <a href="#demo" class="btn btn-light btn-lg me-3">Try the Demo</a>
+                <a href="/purchase" class="btn btn-outline-light btn-lg">Purchase Now</a>
+            </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-5">
-        <div class="container">
+    <section id="features" class="py-5" style="background-color: #f8f9fa; width: 100%;">
+        <div class="container px-3">
             <h2 class="fw-bold text-center mb-5">Why Choose Blazor.QuickWeather?</h2>
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
+                <div class="col-md-4 col-12">
+                    <div class="card h-100 shadow-sm text-center">
+                        <div class="card-body">
                             <i class="bi bi-cloud-sun-fill text-primary display-3 mb-3"></i>
                             <h5 class="fw-bold">Customizable Widgets</h5>
-                            <p>Easily toggle forecast views, use custom or source icons, adjust refresh intervals, and control widget dimensions.</p>
+                            <p>Choose your preferred weather source API, select between custom or source icons, adjust refresh intervals, and set the location manually or automatically.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
+                <div class="col-md-4 col-12">
+                    <div class="card h-100 shadow-sm text-center">
+                        <div class="card-body">
                             <i class="bi bi-server text-success display-3 mb-3"></i>
                             <h5 class="fw-bold">Standalone API Libraries</h5>
                             <p class="card-text">Ready-to-use libraries for <strong><a target="_blank" href="https://openweathermap.org/">OpenWeatherMap</a></strong> and <strong><a target="_blank" href="https://www.weatherapi.com/">WeatherAPI</a></strong>, featuring API object models and HTTP clients.</p>
@@ -42,12 +45,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
+                <div class="col-md-4 col-12">
+                    <div class="card h-100 shadow-sm text-center">
+                        <div class="card-body">
                             <i class="bi bi-gear-wide-connected text-secondary display-3 mb-3"></i>
                             <h5 class="fw-bold">Blazor Ready</h5>
-                            <p>Integrates seamlessly into Blazor Server projects, with full support for .NET 8 and modern web development practices.</p>
+                            <p>Works seamlessly in Blazor Server projects with .NET 8 support and can also be integrated into non-Blazor projects for versatile weather API solutions.</p>
                         </div>
                     </div>
                 </div>
@@ -55,9 +58,9 @@
         </div>
     </section>
 
-    <!-- Demo Section -->
-    <section id="demo" class="py-5 bg-light">
-        <div class="container">
+    <!-- Live Demo Section -->
+    <section id="demo" class="py-5 bg-light" style="width: 100%;">
+        <div class="container px-3">
             <h2 class="fw-bold text-center mb-4">Live Demo</h2>
             <p class="text-center mb-5">Interact with the widgets below to see their customization features in action.</p>
 
@@ -67,41 +70,49 @@
                     <h5 class="mb-0">Widget Customization</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <label class="form-label">Include Forecast:</label>
-                            <input type="checkbox" class="form-check-input ms-2" @bind="IncludeForecast" />
+                    <div class="row g-4">
+                        <!-- Include Forecast -->
+                        <div class="col-sm-6 col-lg-4 text-center">
+                            <label class="form-label d-block">Include Forecast</label>
+                            <div class="form-check form-switch d-inline-block">
+                                <input type="checkbox" class="form-check-input" id="forecastToggle" @bind="IncludeForecast" />
+                                <label class="form-check-label" for="forecastToggle">Enabled</label>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Use Source Icons:</label>
-                            <input type="checkbox" class="form-check-input ms-2" @bind="UseSourceIcons" />
+
+                        <!-- Use Source Icons -->
+                        <div class="col-sm-6 col-lg-4 text-center">
+                            <label class="form-label d-block">Use Source Icons</label>
+                            <div class="form-check form-switch d-inline-block">
+                                <input type="checkbox" class="form-check-input" id="sourceIconsToggle" @bind="UseSourceIcons" />
+                                <label class="form-check-label" for="sourceIconsToggle">Enabled</label>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Update Interval:</label>
-                            <select class="form-select" @bind="UpdateIntervalSeconds">
-                                <option value="0" selected>Auto-Update Disabled</option>
-                                <option value="60">1 Minute</option>
-                                <option value="120">2 Minutes</option>
-                                <option value="300">5 Minutes</option>
-                            </select>
-                            <small class="form-text text-muted">Choose how often the widget refreshes. Auto-Update Disabled will prevent automatic updates.</small>
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label">Adjust Widget Width:</label>
-                            <input type="range" class="form-range" min="300" max="600" step="10" @bind="WidgetWidth" />
-                            <span class="ms-2">Width: @WidgetWidth px</span>
+
+                        <!-- Update Interval -->
+                        <div class="col-sm-12 col-lg-4 text-center">
+                            <label class="form-label">Update Interval (Seconds)</label>
+                            <div class="input-group">
+                                <select class="form-select" @bind="UpdateIntervalSeconds">
+                                    <option value="0">No Auto-Update</option>
+                                    <option value="60">Every 1 Minute</option>
+                                    <option value="120">Every 2 Minutes</option>
+                                    <option value="300">Every 5 Minutes</option>
+                                </select>
+                                <span class="input-group-text">Seconds</span>
+                            </div>
+                            <small class="form-text text-muted">Choose how often the widget refreshes automatically.</small>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Weather Widgets -->
             <div class="row g-4">
-                <div class="col-md-6 mb-4 d-flex justify-content-center">
-                    <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
-                        <div class="card-header bg-primary text-white">
-                            Weather API - Basic
-                        </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="card shadow-sm w-100">
+                        <div class="card-header bg-primary text-white">Weather API - Basic</div>
                         <div class="card-body">
                             <QuickWeatherBasic Source="WeatherDataSource.WeatherApi"
                                                IncludeForecast="IncludeForecast"
@@ -110,11 +121,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4 d-flex justify-content-center">
-                    <div class="card shadow-sm" style="width:@(WidgetWidth)px;">
-                        <div class="card-header bg-success text-white">
-                            OpenWeatherMap - Basic
-                        </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="card shadow-sm w-100">
+                        <div class="card-header bg-success text-white">OpenWeatherMap - Basic</div>
                         <div class="card-body">
                             <QuickWeatherBasic Source="WeatherDataSource.OpenWeatherMap"
                                                IncludeForecast="IncludeForecast"
@@ -126,7 +135,7 @@
             </div>
 
             <!-- Small Widget -->
-            <div class="row mt-5">
+            <div class="row mt-4">
                 <div class="col-12 d-flex justify-content-center">
                     <div class="card shadow-sm" style="max-width: 400px;">
                         <div class="card-header bg-secondary text-white">
@@ -144,17 +153,20 @@
         </div>
     </section>
 
-    <!-- Call to Action -->
-    <section class="text-center py-5" style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white;">
-        <h2 class="fw-bold">Ready to Get Started?</h2>
-        <p class="lead">Own the complete source code and bring weather functionality to your apps today.</p>
-        <a href="/purchase" class="btn btn-light btn-lg">Buy Now</a>
+    <!-- Footer Section -->
+    <section class="text-center py-5"
+             style="background: linear-gradient(to bottom right, #007bff, #00c6ff); color: white; width: 100%;">
+        <div class="container px-3">
+            <h2 class="fw-bold">Ready to Get Started?</h2>
+            <p class="lead">Own the complete source code and bring weather functionality to your apps today.</p>
+            <a href="/purchase" class="btn btn-light btn-lg">Buy Now</a>
+        </div>
     </section>
 </div>
 
 @code {
-    private bool IncludeForecast { get; set; } = false; // Default: no forecast
-    private bool UseSourceIcons { get; set; } = false; // Default: use source icons
-    private int UpdateIntervalSeconds { get; set; } = 0; // Default: no auto-update
-    private int WidgetWidth { get; set; } = 550; // Default widget width
+    private bool IncludeForecast { get; set; } = false;
+    private bool UseSourceIcons { get; set; } = false;
+    private int UpdateIntervalSeconds { get; set; } = 0;
+    private int WidgetWidth { get; set; } = 550;
 }
