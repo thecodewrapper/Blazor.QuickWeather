@@ -10,6 +10,7 @@ Blazor.QuickWeather is a Blazor-based weather application that provides current 
 - Blazor Server support
 - Configurable via `appsettings.json` and user secrets
 - Easy integration and widget registration
+- Includes standalone libraries for OpenWeatherMap and WeatherApi with API object model and HTTP client.
 
 ## Projects
 
