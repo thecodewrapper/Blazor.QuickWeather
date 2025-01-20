@@ -15,11 +15,11 @@ Blazor.QuickWeather is a Blazor-based weather application that provides current 
 
 ### Blazor.QuickWeather
 
-Core library containing models, services, and utilities for weather data retrieval.
+Razor Class Library containing models, services, utilities for weather data retrieval and the weather components.
 
 ### Blazor.QuickWeather.BlazorServer
 
-Blazor Server application that hosts the weather components and pages.
+Blazor Server application that hosts the demo page showcasing the components and usage of the widgets.
 
 ### Blazor.QuickWeather.OpenWeatherMap
 
@@ -163,11 +163,25 @@ Example configuration:
 
 ```json
 "Serilog": {
-  "MinimumLevel": "Information",
+  "Using": [ "Serilog.Sinks.Console" ],
+  "MinimumLevel": {
+    "Default": "Debug",
+    "Override": {
+      "Microsoft": "Warning",
+      "System": "Warning",
+      "Microsoft.AspNetCore.Components": "Warning" // Suppress Blazor logs
+    }
+  },
   "WriteTo": [
-    { "Name": "Console" }
-  ]
-}
+    {
+      "Name": "Console",
+      "Args": {
+        "outputTemplate": "[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}"
+      }
+    }
+  ],
+  "Enrich": [ "FromLogContext", "WithMachineName", "WithThreadId" ]
+},
 ```
 
 ---
@@ -177,3 +191,4 @@ Example configuration:
 - [OpenWeatherMap](https://openweathermap.org/)
 - [WeatherApi](https://www.weatherapi.com/)
 - [Serilog](https://serilog.net/)
+- [Weather Icons](https://github.com/Makin-Things/weather-icons)

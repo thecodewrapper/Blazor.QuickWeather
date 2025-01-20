@@ -1,0 +1,201 @@
+﻿@page "/documentation"
+
+<div class="container py-5">
+    <h1 class="text-center fw-bold mb-4">Blazor.QuickWeather</h1>
+
+    <p class="lead text-center">Blazor.QuickWeather is a Blazor-based weather application that provides current weather and forecast information using multiple weather APIs. The solution is built with .NET 8 and leverages Serilog for logging.</p>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Features</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Display current weather information</li>
+            <li class="list-group-item">Display 7-day weather forecast</li>
+            <li class="list-group-item">Support for multiple weather APIs (OpenWeatherMap, WeatherApi)</li>
+            <li class="list-group-item">Blazor Server support</li>
+            <li class="list-group-item">Configurable via <code>appsettings.json</code> and user secrets</li>
+            <li class="list-group-item">Easy integration and widget registration</li>
+        </ul>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Projects</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Blazor.QuickWeather:</strong> Razor Class Library containing models, services, utilities for weather data retrieval and the weather components.</li>
+            <li class="list-group-item"><strong>Blazor.QuickWeather.BlazorServer:</strong> Blazor Server application that hosts the demo page showcasing the components and usage of the widgets.</li>
+            <li class="list-group-item"><strong>Blazor.QuickWeather.OpenWeatherMap:</strong> Library for interacting with the OpenWeatherMap API.</li>
+            <li class="list-group-item"><strong>Blazor.QuickWeather.WeatherApi:</strong> Library for interacting with the WeatherApi API.</li>
+        </ul>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Getting Started</h2>
+        <h3>Prerequisites</h3>
+        <ul>
+            <li>.NET 8 SDK</li>
+            <li>Visual Studio 2022 or later</li>
+        </ul>
+
+        <h3>Configuration</h3>
+        <ol>
+            <li>
+                <strong>Set up user secrets for API keys:</strong>
+                <pre><code>dotnet user-secrets init --project Blazor.QuickWeather.BlazorServer
+                dotnet user-secrets set &quot;WeatherApiResources:OpenWeatherMap:CurrentApiKey&quot; &quot;your_openweathermap_api_key&quot; --project Blazor.QuickWeather.BlazorServer
+                dotnet user-secrets set &quot;WeatherApiResources:OpenWeatherMap:OneCallApiKey&quot; &quot;your_openweathermap_api_key&quot; --project Blazor.QuickWeather.BlazorServer
+                dotnet user-secrets set &quot;WeatherApiResources:WeatherApi:ApiKey&quot; &quot;your_weatherapi_api_key&quot; --project Blazor.QuickWeather.BlazorServer</code></pre>
+            </li>
+            <li>
+                <strong>Update <code>appsettings.json</code> if needed:</strong>
+                <pre><code>{
+  &quot;WeatherApiResources&quot;: {
+    &quot;OpenWeatherMap&quot;: {
+      &quot;CurrentApiKey&quot;: &quot;&quot;,
+      &quot;OneCallApiKey&quot;: &quot;&quot;
+    },
+    &quot;WeatherApi&quot;: {
+      &quot;ApiKey&quot;: &quot;&quot;
+    }
+  }
+}</code></pre>
+            </li>
+        </ol>
+
+        <h3>Running the Application</h3>
+        <ol>
+            <li>Open the solution in Visual Studio.</li>
+            <li>Set <code>Blazor.QuickWeather.BlazorServer</code> as the startup project.</li>
+            <li>Press <code>F5</code> to build and run the application.</li>
+        </ol>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Registering Weather Sources</h2>
+        <p>Blazor.QuickWeather provides extension methods to simplify adding weather services to your application. You can register the weather services and APIs in the <code>Program.cs</code> file:</p>
+        <pre><code>using Blazor.QuickWeather.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// Configure QuickWeather
+builder.Services.AddQuickWeather(options =>
+{
+    // Additional configuration if needed
+});
+
+// Register OpenWeatherMap API
+builder.Services.AddOpenWeatherMap(options =>
+{
+    options.CurrentWeatherApiKey = builder.Configuration[&quot;WeatherApiResources:OpenWeatherMap:CurrentApiKey&quot;];
+    options.OneCallApiKey = builder.Configuration[&quot;WeatherApiResources:OpenWeatherMap:OneCallApiKey&quot;];
+});
+
+// Register WeatherApi API
+builder.Services.AddWeatherApi(options =>
+{
+    options.ApiKey = builder.Configuration[&quot;WeatherApiResources:WeatherApi:ApiKey&quot;];
+});
+
+var app = builder.Build();</code></pre>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Usage</h2>
+        <p>After registering the services and weather sources, you can use the <code>&lt;QuickWeatherBasic&gt;</code> or <code>&lt;QuickWeatherSmall&gt;</code> component in your Blazor pages to display weather data. Here's how to use it:</p>
+
+        <h3>Basic Example</h3>
+        <pre><code>&lt;QuickWeatherBasic Source=&quot;WeatherDataSource.WeatherApi&quot;
+                   IncludeForecast=&quot;true&quot;
+                   UseSourceIcons=&quot;true&quot;
+                   UpdateIntervalSeconds=&quot;300&quot; /&gt;</code></pre>
+
+        <h3>Parameters</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>Source</code></td>
+                    <td><code>WeatherDataSource</code></td>
+                    <td>Specifies the weather source to use. Options are <code>WeatherApi</code> or <code>OpenWeatherMap</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>IncludeForecast</code></td>
+                    <td><code>bool</code></td>
+                    <td>Determines whether to include a 7-day weather forecast. Defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>UseSourceIcons</code></td>
+                    <td><code>bool</code></td>
+                    <td>Indicates whether to use the weather icons provided by the selected weather API. Defaults to <code>false</code>.</td>
+                </tr>
+                <tr>
+                    <td><code>UpdateIntervalSeconds</code></td>
+                    <td><code>int</code></td>
+                    <td>Specifies the interval (in seconds) for refreshing weather data. Set to <code>0</code> to disable auto-refresh.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Customization Example</h3>
+        <pre><code>&lt;QuickWeatherBasic Source=&quot;WeatherDataSource.OpenWeatherMap&quot;
+                   IncludeForecast=&quot;false&quot;
+                   UseSourceIcons=&quot;true&quot;
+                   UpdateIntervalSeconds=&quot;600&quot; /&gt;</code></pre>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Logging</h2>
+        <p>The application uses Serilog for logging. Logs are configured in <code>appsettings.json</code> and can be customized as needed.</p>
+
+        <pre><code>{
+  &quot;Serilog&quot;: {
+    &quot;Using&quot;: [ &quot;Serilog.Sinks.Console&quot; ],
+    &quot;MinimumLevel&quot;: {
+      &quot;Default&quot;: &quot;Debug&quot;,
+      &quot;Override&quot;: {
+        &quot;Microsoft&quot;: &quot;Warning&quot;,
+        &quot;System&quot;: &quot;Warning&quot;,
+        &quot;Microsoft.AspNetCore.Components&quot;: &quot;Warning&quot; // Suppress Blazor logs
+      }
+    },
+    &quot;WriteTo&quot;: [
+      {
+        &quot;Name&quot;: &quot;Console&quot;,
+        &quot;Args&quot;: {
+          &quot;outputTemplate&quot;: &quot;[{Timestamp:HH:mm:ss} {Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}&quot;
+        }
+      }
+    ],
+    &quot;Enrich&quot;: [ &quot;FromLogContext&quot;, &quot;WithMachineName&quot;, &quot;WithThreadId&quot; ]
+  }
+}</code></pre>
+    </section>
+
+    <hr class="my-5">
+
+    <section>
+        <h2 class="fw-bold">Acknowledgements</h2>
+        <ul class="list-unstyled">
+            <li><a href="https://openweathermap.org/">OpenWeatherMap</a></li>
+            <li><a href="https://www.weatherapi.com/">WeatherApi</a></li>
+            <li><a href="https://serilog.net/">Serilog</a></li>
+            <li><a href="https://github.com/Makin-Things/weather-icons">Weather Icons</a></li>
+        </ul>
+    </section>
+</div>
